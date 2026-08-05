@@ -1,0 +1,7 @@
+.pre-commit-config.yaml
+.direnv
+tmp
+result
+*.iso
+*.bk
+tree.md
