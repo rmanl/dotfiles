@@ -1,17 +1,14 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2086
-#
-# this script is used to rebuild the system configuration for the current host.
-#
-# sc2086 is ignored because we purposefully pass some values as a set of arguments, so we want the splitting to happen
+# sc2086: some values are intentionally word-split into argument sets
 
-# helpers library
 # shellcheck disable=SC1091
 source "$(dirname "${BASH_SOURCE[0]}")/helpers.sh"
 
 switch_args="--show-trace --impure --flake "
 if [[ -n $1 && $1 == "trace" ]]; then
   switch_args="$switch_args --show-trace "
+  HOST=$(hostname)
 elif [[ -n $1 ]]; then
   HOST=$1
 else
@@ -23,7 +20,7 @@ green "====== REBUILD ======"
 if command -v nh &>/dev/null; then
   REPO_PATH=$PWD
   export REPO_PATH
-  nh os switch . -- --impure --show-trace
+  nh os switch .#"$HOST" -- --impure --show-trace
 else
   sudo nixos-rebuild "$switch_args"
 fi
@@ -33,9 +30,7 @@ if [ $? -eq 0 ]; then
   green "====== POST-REBUILD ======"
   green "Rebuilt successfully"
 
-  # check if there are any pending changes that would affect the build succeeding.
   if git diff --exit-code >/dev/null && git diff --staged --exit-code >/dev/null; then
-    # check if the current commit has a buildable tag
     if git tag --points-at HEAD | grep -q buildable; then
       yellow "Current commit is already tagged as buildable"
     else

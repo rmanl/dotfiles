@@ -1,7 +1,8 @@
-.pre-commit-config.yaml
-.direnv
-tmp
-result
-*.iso
 *.bk
+*.iso
+.claude
+.direnv
+.pre-commit-config.yaml
+result
+tmp
 tree.md

@@ -1,0 +1,8 @@
+{
+  flake.nixosModules.ananicy = { pkgs, ... }: {
+    services.ananicy = {
+      enable = true;
+      package = pkgs.ananicy-cpp;
+    };
+  };
+}

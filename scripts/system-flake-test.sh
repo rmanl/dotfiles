@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
-if [ "$1" = "" ]; then
-	export HOST=$1
+if [[ -n ${1-} ]]; then
+  HOST=$1
 else
-	HOST=$(hostname)
-	export HOST
+  HOST=$(hostname)
 fi
+export HOST
 
 sudo nixos-rebuild --impure --flake .#"$HOST" test --show-trace

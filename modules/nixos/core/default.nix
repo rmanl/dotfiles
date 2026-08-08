@@ -1,30 +1,28 @@
 {
+  self,
   inputs,
-  lib,
-  config,
   ...
 }:
 {
-  imports = lib.flatten [
-    inputs.hjem.nixosModules.default
-    inputs.sops-nix.nixosModules.sops
-    inputs.self.modules.hostSpec.default
+  flake.nixosModules.core = { lib, host, ... }: {
+    imports = [
+      inputs.hjem.nixosModules.default
+      inputs.sops-nix.nixosModules.sops
+    ]
+    ++ (with self.nixosModules; [
+      coreBoot
+      coreLocale
+      coreNix
+      coreRoot
+      coreSecurity
+      coreSops
+      coreSsh
+      userPrimary
+    ]);
 
-    ./boot.nix
-    ./locale.nix
-    ./nix.nix
-    ./security
-    ./sops.nix
-    ./ssh.nix
-    ../../users/primary
-    ../../users/primary/nixos.nix
-  ];
+    hjem.users.${host.userName}.enable = true;
+    networking.networkmanager.enable = true;
 
-  hjem.users.${config.hostSpec.userName}.enable = true;
-
-  networking = {
-    networkmanager.enable = true;
+    system.stateVersion = lib.mkDefault "24.05";
   };
-
-  system.stateVersion = lib.mkDefault "24.05";
 }

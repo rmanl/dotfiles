@@ -1,0 +1,6 @@
+[
+  "exegol"
+  "ferrix"
+  "mustafar"
+  "scarif"
+]
