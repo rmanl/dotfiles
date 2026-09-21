@@ -39,8 +39,10 @@ in
           thinkfan
           throttled
           intel
-        ])
-        ++ [ self.nixosModules."${host.hostWM}Wm" ];
+
+          # dynamic values need self to resolve at eval time
+          self.nixosModules."${host.hostWM}Wm"
+        ]);
       };
     };
   };
