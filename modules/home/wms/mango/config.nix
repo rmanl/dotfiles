@@ -45,7 +45,6 @@
 
         # overview settings
         enable_hotarea=0
-        ov_tab_mode=0
 
         # misc
         xwayland_persistence=1
