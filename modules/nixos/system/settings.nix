@@ -10,7 +10,7 @@
         ];
       };
 
-      udev.packages = with pkgs; [ gnome-settings-daemon ];
+      udev.packages = [ pkgs.gnome-settings-daemon ];
       journald.extraConfig = ''
         SystemMaxUse=50M
         RuntimeMaxUse=10M

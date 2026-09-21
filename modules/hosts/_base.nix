@@ -14,12 +14,18 @@
   isMinimal = false;
   isMultiDisk = false;
   hashedPassword = "$y$j9T$Ac.m5IZ6ku/nrqK9K9kBi1$lRHp3Xg4Vk7Ly/VAiv5d839VlwDRNt2w9ACMMKe8kR2";
-
-  inherit (inputs.nix-secrets)
-    domain
-    email
-    location
-    networking
-    userFullName
-    ;
 }
+// (
+  if inputs == null then
+    { }
+  else
+    {
+      inherit (inputs.nix-secrets)
+        domain
+        email
+        location
+        networking
+        userFullName
+        ;
+    }
+)

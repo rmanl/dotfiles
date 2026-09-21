@@ -4,9 +4,9 @@
     { ... }:
     {
       imports = with self.nixosModules; [
-        gimp
-        libreoffice
-        zathura
+        officeGimp
+        officeLibre
+        officeZathura
       ];
     };
 }

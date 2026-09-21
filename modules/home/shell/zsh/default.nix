@@ -4,7 +4,7 @@
     { ... }:
     {
       imports = with self.nixosModules; [
-        zshrc
+        zshRc
         zshDevTemplates
       ];
     };

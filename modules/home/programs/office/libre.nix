@@ -1,5 +1,5 @@
 {
-  flake.nixosModules.libreoffice =
+  flake.nixosModules.officeLibre =
     { host, pkgs, ... }:
     {
       hjem.users.${host.userName} = {

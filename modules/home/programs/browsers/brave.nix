@@ -1,5 +1,5 @@
 {
-  flake.nixosModules.brave =
+  flake.nixosModules.browsersBrave =
     { host, pkgs, ... }:
     let
       policies = {

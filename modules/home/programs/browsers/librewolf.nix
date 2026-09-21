@@ -1,6 +1,6 @@
 # https://raw.githubusercontent.com/DandelionSprout/adfilt/master/LegitimateURLShortener.txt
 {
-  flake.nixosModules.librewolf =
+  flake.nixosModules.browsersLibrewolf =
     { host, pkgs, ... }:
     let
       policies = {

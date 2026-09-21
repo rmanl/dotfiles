@@ -1,5 +1,5 @@
 {
-  flake.nixosModules.zathura =
+  flake.nixosModules.officeZathura =
     {
       host,
       inputs,

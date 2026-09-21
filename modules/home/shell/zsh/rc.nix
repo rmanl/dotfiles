@@ -1,5 +1,5 @@
 {
-  flake.nixosModules.zshrc =
+  flake.nixosModules.zshRc =
     {
       host,
       config,

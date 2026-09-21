@@ -4,8 +4,8 @@
     { ... }:
     {
       imports = with self.nixosModules; [
-        brave
-        librewolf
+        browsersBrave
+        browsersLibrewolf
       ];
     };
 }

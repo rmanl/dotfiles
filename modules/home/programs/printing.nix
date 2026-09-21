@@ -56,9 +56,7 @@
         };
         sane = {
           enable = true;
-          extraBackends = with pkgs; [
-            sane-airscan
-          ];
+          extraBackends = [ pkgs.sane-airscan ];
         };
       };
     };
