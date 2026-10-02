@@ -9,7 +9,9 @@
     }:
     let
       inherit (host) hostWM userName;
-      session = "${hostWM} > /dev/null";
+      session = ''${pkgs.bash}/bin/bash -c "source ${
+        config.hjem.users.${userName}.environment.loadEnv
+      } && exec ${hostWM} > /dev/null"'';
       orderOffset = config.security.pam.services.greetd.rules.session.gnome_keyring.order - 1;
     in
     {
