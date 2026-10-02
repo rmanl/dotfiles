@@ -8,7 +8,7 @@
     let
       inherit (host) browser userName;
       browserApps = [ browser ];
-      imageViewer = [ "feh" ];
+      imageViewer = [ "imv" ];
       videoPlayer = [ "mpv" ];
       audioPlayer = [ "mpv" ];
 

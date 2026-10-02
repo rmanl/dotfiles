@@ -21,7 +21,7 @@
                 "pdf"
                 "epub"
               ];
-              "feh -F" = [
+              "imv -f" = [
                 "jpg"
                 "jpeg"
                 "png"

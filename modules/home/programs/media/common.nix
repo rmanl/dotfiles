@@ -4,7 +4,7 @@
     {
       hjem.users.${host.userName} = {
         packages = with pkgs; [
-          feh
+          imv
           mpv
           mpvScripts.modernz
           mpvScripts.sponsorblock-minimal

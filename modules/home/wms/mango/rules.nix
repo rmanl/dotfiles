@@ -46,8 +46,8 @@
         # pcmanfm
         windowrule=isfloating:1,width:800,height:600,appid:pcmanfm
 
-        # feh image viewer
-        windowrule=isfullscreen:1,appid:feh
+        # imv image viewer
+        windowrule=isfullscreen:1,appid:imv
 
         # proton vpn
         windowrule=width:450,height:800,appid:.proton-app-wrapped
