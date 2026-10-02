@@ -13,7 +13,6 @@
         userName
         ;
       dataPath = if isMultiDisk then "/mnt/data" else "$HOME/data";
-      wmName = lib.toUpper (builtins.substring 0 1 hostWM) + builtins.substring 1 (-1) hostWM;
     in
     {
       hjem.users.${userName} = {
@@ -21,7 +20,7 @@
           FLAKE = "$HOME/.config/frosty";
           XDG_CACHE_HOME = "$HOME/.local/cache";
           XDG_CONFIG_HOME = "$HOME/.config";
-          XDG_CURRENT_DESKTOP = wmName;
+          XDG_CURRENT_DESKTOP = hostWM;
           XDG_DATA_HOME = "$HOME/.local/share";
           XDG_STATE_HOME = "$HOME/.local/state";
           XDG_DATA_DIR = "${dataPath}";
@@ -33,7 +32,7 @@
           XDG_PROJECTS_DIR = "${dataPath}/projects";
           XDG_PUBLICSHARE_DIR = "/var/empty";
           XDG_SCREENSHOTS_DIR = "${dataPath}/stuff/pics/screenshots";
-          XDG_SESSION_DESKTOP = wmName;
+          XDG_SESSION_DESKTOP = hostWM;
           XDG_SHARED_DIR = "${dataPath}/shared";
           XDG_STUFF_DIR = "${dataPath}/stuff";
           XDG_TEMPLATES_DIR = "/var/empty";

@@ -134,6 +134,8 @@ Set `hostWM = "<name>"` on the target host, either as an override in that host's
 
 `host.hostWM` is also read directly in a few places that don't need changes when adding a WM: `modules/nixos/services/greetd/default.nix` (execs it directly), `modules/home/graphical/hypridle.nix` (has a WM-specific dpms branch, e.g. `"hyprland"`, that new WMs can add a case for if needed), and `modules/home/shell/zsh/zshrc.nix` (a mango-only IPC keybind that degrades gracefully for other WMs).
 
+`modules/home/graphical/xdg/env.nix` sets `XDG_CURRENT_DESKTOP`/`XDG_SESSION_DESKTOP` to raw `host.hostWM`, which matches upstream convention for mango and sway (both lowercase, per their `wayland-sessions/*.desktop` `DesktopNames=`). Hyprland is the exception: keep `hostWM = "hyprland"` lowercase as usual (its own binary is a lowercase symlink to the real `Hyprland` executable, so exec/profile-lookup/IPC checks all keep working unchanged), but when adding it, change `env.nix` to override just these two vars to `"Hyprland"` for that WM (e.g. `if hostWM == "hyprland" then "Hyprland" else hostWM`) — don't add that branch until Hyprland actually exists in the repo.
+
 ## Nvidia driver build failures
 
 If `hardware.nvidia.package` (default `nvidiaPackages.stable`) fails to build after a flake update, find a driver version/hash that builds against the kernel this flake update brought in (check nixos-unstable or an older nixpkgs revision for one confirmed to build against that kernel), and pin it in `modules/nixos/graphics/nvidia/settings.nix`:
