@@ -9,6 +9,7 @@
   wallpaper = "station";
   browser = "librewolf";
   isDesktop = false;
+  isDualBoot = false;
   isGaming = false;
   isLaptop = false;
   isMinimal = false;

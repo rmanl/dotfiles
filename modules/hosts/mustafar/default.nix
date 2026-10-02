@@ -6,6 +6,7 @@ let
     monitorName = "DP-2";
     mangoMonitor = "name:^DP-2$,width:2560,height:1440,refresh:165,x:0,y:0,scale:1,vrr:1";
     isDesktop = true;
+    isDualBoot = true;
   };
 in
 {

@@ -1,8 +1,8 @@
 {
-  flake.nixosModules.coreLocale = _: {
+  flake.nixosModules.coreLocale = { host, ... }: {
     time = {
       timeZone = "Europe/Amsterdam";
-      hardwareClockInLocalTime = true;
+      hardwareClockInLocalTime = host.isDualBoot;
     };
 
     i18n =
