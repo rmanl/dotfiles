@@ -20,6 +20,4 @@
   # making it harder to load malicious kernel modules
   # can make virtualbox or nvidia drivers unusable
   "module.sig_enforce=1"
-  # prevents user space code excalation
-  "lockdown=confidentiality"
 ]

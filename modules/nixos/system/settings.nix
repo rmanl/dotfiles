@@ -24,7 +24,6 @@
 
     environment.systemPackages = with pkgs; [
       btrfs-progs
-      cifs-utils
       git
       usermount
       uutils-coreutils-noprefix

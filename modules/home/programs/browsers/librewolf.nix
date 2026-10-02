@@ -54,6 +54,14 @@
               Value = true;
               Status = "default";
             };
+            "media.peerconnection.ice.default_address_only" = {
+              Value = true;
+              Status = "locked";
+            };
+            "media.peerconnection.ice.no_host" = {
+              Value = true;
+              Status = "locked";
+            };
           };
           ExtensionSettings =
             let

@@ -14,7 +14,10 @@
         useDHCP = false;
         networkmanager = {
           enable = true;
-          wifi.powersave = isLaptop;
+          wifi = {
+            powersave = isLaptop;
+            macAddress = "stable";
+          };
         };
       };
 

@@ -13,5 +13,7 @@
         };
         extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
       };
+
+      systemd.user.services.xdg-document-portal.enable = false;
     };
 }

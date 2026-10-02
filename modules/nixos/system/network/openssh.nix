@@ -11,6 +11,7 @@
 
         settings = {
           PasswordAuthentication = false;
+          KbdInteractiveAuthentication = false;
           PermitRootLogin = "no";
           StreamLocalBindUnlink = "yes";
           GatewayPorts = "clientspecified";

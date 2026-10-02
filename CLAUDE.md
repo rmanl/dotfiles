@@ -151,6 +151,18 @@ package = config.boot.kernelPackages.nvidiaPackages.mkDriver {
 
 Leave a comment above the pin noting why `stable` failed and against which kernel the pinned version was confirmed to build. On each subsequent flake update, check whether `nvidiaPackages.stable` builds again against the new kernel — if so, comment out the pin (don't delete it) and switch back to `nvidiaPackages.stable`.
 
+## AppArmor on NixOS
+
+Removed from `modules/nixos/core/security/default.nix` (was `security.apparmor.enable` + `killUnconfinedConfinables` + `apparmor-profiles`/`apparmor-utils` packages) because it provided zero real confinement: upstream profiles are written for FHS paths (`/usr/lib/firefox/firefox`, `/opt/brave.com/...`) that don't exist on NixOS, and the shipped `brave`/`firefox` profiles specifically are unconfined no-op stubs regardless. A handful of NixOS *service* modules (`services.transmission`, `murmur`, `miniflux`, `lxc`) do ship real Nix-store-aware profiles via `security.apparmor.policies`, but none cover desktop GUI apps.
+
+Recheck on each new NixOS stable release (26.11, 27.05, ...) whether NixOS-native profile support has extended to desktop apps actually used here (particularly the browsers, `librewolf`/`brave`) — if so, re-add `security.apparmor.enable = true` plus the relevant `security.apparmor.policies` entries.
+
+## Lockdown LSM on NixOS
+
+Removed from `modules/nixos/core/security/default.nix` (was `security.lsm = [ "lockdown" ]`) and `modules/nixos/core/security/_params.nix` (was `lockdown=confidentiality` kernel param) because it was never actually active: none of `linuxPackages`, `linuxPackages_zen`, or `linuxPackages_xanmod_stable` in nixpkgs build with `CONFIG_SECURITY_LOCKDOWN_LSM` set — only `_hardened` kernel variants do, and those are off the table (too restrictive for normal desktop/laptop use). Even if it did activate, lockdown's `confidentiality` mode would block loading the unsigned, out-of-tree Nvidia kernel module used here.
+
+Recheck only if switching to a kernel package that compiles in `CONFIG_SECURITY_LOCKDOWN_LSM` (verify via that kernel's `linux-config-*` derivation) — and confirm it coexists with the Nvidia module (e.g. via module signing through lanzaboote) before re-enabling.
+
 ## Committing changes
 
 Never push — the user always pushes themselves.
@@ -177,3 +189,5 @@ For a commit bundling changes across multiple *different* categories, use a comm
 - <description>
 <cat>: <description>
 ```
+
+Keep every `<description>` concise but clear — a short clause, not a full explanatory sentence.

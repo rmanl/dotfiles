@@ -1,8 +1,12 @@
 [
   # obscure network protocols
   "ax25"
+  "dccp"
   "netrom"
+  "rds"
   "rose"
+  "sctp"
+  "tipc"
   # old or rare or insufficiently audited filesystems
   "adfs"
   "affs"

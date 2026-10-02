@@ -59,6 +59,7 @@
         SyncDisabled = false;
         TorDisabled = true;
         TranslateEnabled = false;
+        WebRtcIPHandling = "default_public_interface_only";
       };
     in
     {
