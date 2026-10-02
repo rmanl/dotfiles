@@ -52,7 +52,7 @@ Always use `host.*` from `specialArgs` for host-level properties (`isLaptop`, `i
 
 ## Destructuring conventions
 
-- `host.*` and `config.*`: only pull fields into `inherit (host) foo bar;` / `inherit (config) foo bar;` when 2+ distinct fields from that source are used in the same scope. A single field used once stays inline (e.g. `host.foo`) — don't introduce a binding for it.
+- `host.*` and `config.*`: pull fields into `inherit (host) foo bar;` / `inherit (config) foo bar;` once there are 2+ distinct fields from that source used in the same scope, OR a single field referenced 2+ times. A single field referenced exactly once stays inline (e.g. `host.foo`) — don't introduce a binding for it.
 - Never consolidate `inputs.*` this way — keep flake inputs fully qualified (`inputs.nixpkgs`, `inputs.hardware`, etc.) even when a file uses several.
 - `config.hjem` always stays fully qualified too, even when it would otherwise qualify for inheriting — keeps every module that reads it back consistent with the `hjem.users.${userName} = { ... }` option-definition style used everywhere else.
 
