@@ -21,7 +21,6 @@
 
         # system info
         cpufetch # cpu info
-        fastfetch # system info
         file # show file info
         onefetch # git repo info
 

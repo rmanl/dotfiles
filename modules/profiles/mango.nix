@@ -24,6 +24,7 @@
         bat
         btop
         direnv
+        fastfetch
         git
         tealdeer
         tools
