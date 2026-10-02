@@ -134,6 +134,23 @@ Set `hostWM = "<name>"` on the target host, either as an override in that host's
 
 `host.hostWM` is also read directly in a few places that don't need changes when adding a WM: `modules/nixos/services/greetd/default.nix` (execs it directly), `modules/home/graphical/hypridle.nix` (has a WM-specific dpms branch, e.g. `"hyprland"`, that new WMs can add a case for if needed), and `modules/home/shell/zsh/zshrc.nix` (a mango-only IPC keybind that degrades gracefully for other WMs).
 
+## Nvidia driver build failures
+
+If `hardware.nvidia.package` (default `nvidiaPackages.stable`) fails to build after a flake update, find a driver version/hash that builds against the kernel this flake update brought in (check nixos-unstable or an older nixpkgs revision for one confirmed to build against that kernel), and pin it in `modules/nixos/graphics/nvidia/settings.nix`:
+
+```nix
+package = config.boot.kernelPackages.nvidiaPackages.mkDriver {
+  version = "<version>";
+  sha256_64bit = "<hash>";
+  sha256_aarch64 = "<hash>";
+  openSha256 = "<hash>";
+  settingsSha256 = "<hash>";
+  persistencedSha256 = "<hash>";
+};
+```
+
+Leave a comment above the pin noting why `stable` failed and against which kernel the pinned version was confirmed to build. On each subsequent flake update, check whether `nvidiaPackages.stable` builds again against the new kernel — if so, comment out the pin (don't delete it) and switch back to `nvidiaPackages.stable`.
+
 ## Committing changes
 
 Never push — the user always pushes themselves.
