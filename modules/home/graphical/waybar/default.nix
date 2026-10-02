@@ -156,7 +156,7 @@
                 ];
                 format-muted = "<span font='12'>󰸈</span>";
                 max-volume = 100;
-                on-click = "${runOnce "pavucontrol"}";
+                on-click = "${runOnce "pwvucontrol"}";
                 on-click-middle = "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
                 on-click-right = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 50%";
                 on-scroll-down = "wpctl set-volume -l '1.0' @DEFAULT_AUDIO_SINK@ 5%-";

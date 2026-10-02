@@ -41,7 +41,7 @@
         windowrule=isfloating:1,width:800,height:600,appid:org.gnome.seahorse.Application
 
         # volume control
-        windowrule=isfloating:1,width:800,height:600,appid:org.pulseaudio.pavucontrol
+        windowrule=isfloating:1,width:800,height:600,appid:com.saivert.pwvucontrol
 
         # pcmanfm
         windowrule=isfloating:1,width:800,height:600,appid:pcmanfm
