@@ -6,11 +6,20 @@
       ...
     }:
     let
-      inherit (host) browser userName;
-      browserApps = [ browser ];
-      imageViewer = [ "imv" ];
-      videoPlayer = [ "mpv" ];
-      audioPlayer = [ "mpv" ];
+      inherit (host)
+        browser
+        chromeBrowser
+        editor
+        imageViewer
+        mediaPlayer
+        pdfViewer
+        tuiFileManager
+        userName
+        ;
+      browserApps = [ browser.appId ];
+      imageViewerApps = [ imageViewer.appId ];
+      videoPlayer = [ mediaPlayer.appId ];
+      audioPlayer = [ mediaPlayer.appId ];
 
       xdgAssociations =
         type: program: list:
@@ -21,7 +30,7 @@
           }) list
         );
 
-      image = xdgAssociations "image" imageViewer [
+      image = xdgAssociations "image" imageViewerApps [
         "png"
         "svg"
         "jpeg"
@@ -56,11 +65,11 @@
 
       associations = builtins.mapAttrs (_: v: (map (e: "${e}.desktop") v)) (
         {
-          "application/pdf" = [ "org.pwmt.zathura-pdf-mupdf" ];
+          "application/pdf" = [ pdfViewer.appId ];
           "text/html" = browserApps;
-          "text/plain" = [ "nvim" ];
-          "x-scheme-handler/chrome" = [ "brave" ];
-          "inode/directory" = [ "fx" ];
+          "text/plain" = [ editor.appId ];
+          "x-scheme-handler/chrome" = [ chromeBrowser.appId ];
+          "inode/directory" = [ tuiFileManager.appId ];
         }
         // image
         // video

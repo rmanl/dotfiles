@@ -9,7 +9,12 @@
       ...
     }:
     let
-      inherit (host) colorTheme hostWM userName;
+      inherit (host)
+        colorTheme
+        hostWM
+        tuiFileManager
+        userName
+        ;
       isMango = hostWM == "mango";
       aliasBlock = import ../_aliasBlock.nix { inherit lib; };
     in
@@ -121,7 +126,7 @@
               function felix() {
                 exec </dev/tty
                 exec <&1
-                fx "$PWD"
+                ${tuiFileManager} "$PWD"
                 zle reset-prompt > /dev/null 2>&1 || true
               }
               zle -N felix

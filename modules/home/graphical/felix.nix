@@ -6,6 +6,14 @@
       lib,
       ...
     }:
+    let
+      inherit (host)
+        editor
+        imageViewer
+        mediaPlayer
+        pdfViewer
+        ;
+    in
     {
       hjem.users.${host.userName} = {
         packages = with pkgs; [
@@ -15,13 +23,13 @@
         files.".config/felix/config.yaml" = {
           generator = lib.generators.toYAML { };
           value = {
-            default = "nvim";
+            default = "${editor}";
             exec = {
-              zathura = [
+              "${pdfViewer}" = [
                 "pdf"
                 "epub"
               ];
-              "imv -f" = [
+              "${imageViewer} -f" = [
                 "jpg"
                 "jpeg"
                 "png"
@@ -29,12 +37,12 @@
                 "svg"
                 "hdr"
               ];
-              mpv = [
+              "${mediaPlayer}" = [
                 "mp4"
                 "mkv"
                 "webm"
               ];
-              "mpv --audio-display=no" = [
+              "${mediaPlayer} --audio-display=no" = [
                 "mp3"
                 "m4a"
               ];

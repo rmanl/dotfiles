@@ -16,6 +16,7 @@
       systemd.services.NVFanControl = {
         enable = true;
         description = "NVIDIA Fan Control Bash Script";
+        startLimitIntervalSec = 0; # must keep retrying every 1s, no throttling — GPU fan safety
         serviceConfig = {
           Type = "oneshot";
         };

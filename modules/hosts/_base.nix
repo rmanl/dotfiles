@@ -4,18 +4,20 @@
   userName = "rma";
   handle = "rmanl";
   sshKeyName = "id_rma";
+  hashedPassword = "$y$j9T$Ac.m5IZ6ku/nrqK9K9kBi1$lRHp3Xg4Vk7Ly/VAiv5d839VlwDRNt2w9ACMMKe8kR2";
+
   hostWM = "mango";
   colorTheme = "nord";
   wallpaper = "station";
-  browser = "librewolf";
+
   isDesktop = false;
   isDualBoot = false;
   isGaming = false;
   isLaptop = false;
   isMinimal = false;
   isMultiDisk = false;
-  hashedPassword = "$y$j9T$Ac.m5IZ6ku/nrqK9K9kBi1$lRHp3Xg4Vk7Ly/VAiv5d839VlwDRNt2w9ACMMKe8kR2";
 }
+// import ./_apps.nix
 // (
   if inputs == null then
     { }

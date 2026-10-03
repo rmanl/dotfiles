@@ -50,6 +50,25 @@ Never add `home` to the host attrset. Always derive it inline as `"/home/${host.
 
 Always use `host.*` from `specialArgs` for host-level properties (`isLaptop`, `isGaming`, `isMinimal`, `hostWM`, etc.). Never use NixOS options or a `hostSpec` module for these — follow the dendritic pattern.
 
+## Swappable app identities (`_apps.nix`)
+
+`modules/hosts/_apps.nix` centralizes every swappable app choice (terminal, browser, launcher, etc.) as a `host.*` property, so switching apps only requires editing `_apps.nix` — never the consuming modules. Built via a `mkApp` helper:
+
+```nix
+mkApp = spec:
+  if builtins.isString spec
+  then { name = spec; appId = spec; __toString = self: self.name; }
+  else { name = spec.name; appId = spec.appId or spec.name; __toString = self: self.name; };
+```
+
+Each property is either a bare string (name and appId are the same, e.g. `<prop> = "<binary>";`) or `{ name; appId; }` when the app's real Wayland appid/desktop-id differs from its binary name.
+
+The `__toString` coercion means every call site using string interpolation (`"${host.<prop>}"`) needs no changes — it resolves to `.name` automatically. This does **not** apply to dynamic attribute-path syntax (`foo.${host.<prop>}`) — force it through a quoted interpolation instead (`foo."${host.<prop>}"`). Only sites that need the desktop-identity label (window-rule `appid:` matches, mime/desktop handler keys) use `.appId` explicitly.
+
+**Adding a property**: only promote an app to `_apps.nix` if its identity is referenced (outside its own package declaration) in 2+ files — that's the actual bar, not "is this an app." A single-file-only reference stays a plain hardcoded value where it's used (e.g. gaming apps in `rules.nix` — each only has one reference, inside the `isGaming`-gated window-rule block). Package declarations (`pkgs.<name>`) always stay hardcoded, regardless of whether the identity itself is promoted.
+
+**Changing an app**: edit the value in `_apps.nix`. If it uses the `{ name; appId; }` form, verify the new app's real appid first — check live via `mmsg get all-clients` while it's running, or a `.desktop` file's `StartupWMClass=` field for XWayland apps.
+
 ## Destructuring conventions
 
 - `host.*` and `config.*`: pull fields into `inherit (host) foo bar;` / `inherit (config) foo bar;` once there are 2+ distinct fields from that source used in the same scope, OR a single field referenced 2+ times. A single field referenced exactly once stays inline (e.g. `host.foo`) — don't introduce a binding for it.
@@ -189,7 +208,7 @@ Commit message conventions:
 - Lockfile-only bump: `flake: update inputs`
 - Fix for breakage caused by a prior flake update: `flake: fix` (singular) or `flake: fixes` (plural), with a `-` bullet per fix in the body, e.g. `- <scope>: <what changed>, removed/changed upstream in <version>`
 
-`<scope>` is the module's parent dir name (`graphical`, `services`, `hosts`, etc.).
+`<scope>` is normally the module's parent dir name (`graphical`, `services`, `hosts`, etc.). When several changes in the same commit are all about one specific app or feature, even across different parent dirs, use that app/feature name as the category instead of splitting by dir (e.g. `<app>:` grouping a window-rule fix and an unfree-allowlist addition together, rather than separate `wms:`/`system:` entries).
 
 Single-line subject only — no body, unless the user explicitly asks for one, or the commit bundles multiple changes from the same category (e.g. several `refactor` changes) into one commit, in which case use `<category>:` as the subject and a `-` bullet with its own full description per change.
 

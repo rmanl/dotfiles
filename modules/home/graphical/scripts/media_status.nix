@@ -7,8 +7,9 @@
       ...
     }:
     let
+      inherit (host) mediaPlayer spotify;
       media_status = pkgs.writeShellScriptBin "media_status" ''
-        PLAYERS=("mpv" "spotify" "spotify_player") # playerctl -l
+        PLAYERS=("${mediaPlayer}" "${spotify}") # playerctl -l
         FORMAT="{{ title }} ({{ artist }})"
 
         get_player_status() {

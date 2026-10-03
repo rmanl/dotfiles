@@ -8,7 +8,12 @@
       ...
     }:
     let
-      inherit (host) isGaming isLaptop userName;
+      inherit (host)
+        isGaming
+        isLaptop
+        userName
+        volumeMixer
+        ;
       inherit (config) colors theme;
       runOnce = program: "pgrep ${program} || ${program}";
     in
@@ -156,7 +161,7 @@
                 ];
                 format-muted = "<span font='12'>󰸈</span>";
                 max-volume = 100;
-                on-click = "${runOnce "pwvucontrol"}";
+                on-click = "${runOnce volumeMixer}";
                 on-click-middle = "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
                 on-click-right = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 50%";
                 on-scroll-down = "wpctl set-volume -l '1.0' @DEFAULT_AUDIO_SINK@ 5%-";

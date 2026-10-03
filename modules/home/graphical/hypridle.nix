@@ -10,13 +10,13 @@
       inherit (host)
         hostWM
         isLaptop
+        locker
         monitorName
         userName
         ;
       runOnce = program: "pgrep ${program} || ${program}";
       lock = "loginctl lock-session";
       brillo = lib.getExe pkgs.brillo;
-      hyprlock = lib.getExe pkgs.hyprlock;
 
       dpmsOff =
         if hostWM == "hyprland" then "hyprctl dispatch dpms off" else "wlopm --off ${monitorName}";
@@ -33,7 +33,7 @@
             after_sleep_cmd=${dpmsOn}
             before_sleep_cmd=${lock}
             inhibit_sleep=2
-            lock_cmd=${runOnce "${hyprlock}"}
+            lock_cmd=${runOnce "${locker}"}
           }
 
           listener {

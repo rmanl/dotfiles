@@ -10,6 +10,7 @@
       allowedUnfree = [
         "claude-code"
         "spotify"
+        "steam"
         "unrar"
       ];
       isCudaEula =

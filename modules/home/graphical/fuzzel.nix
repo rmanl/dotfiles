@@ -4,12 +4,16 @@
       host,
       config,
       inputs,
-      lib,
       pkgs,
       ...
     }:
     let
-      inherit (host) colorTheme isDesktop userName;
+      inherit (host)
+        colorTheme
+        isDesktop
+        terminal
+        userName
+        ;
     in
     {
       hjem.users.${userName} = {
@@ -23,7 +27,7 @@
           font=${fontMono}:size=${toString (if isDesktop then fontSize else fontSize - 4)}
           horizontal-pad=8
           line-height=16
-          terminal=${lib.getExe pkgs.foot}
+          terminal=${terminal}
           width=50
           include=${inputs.themes}/extra/fuzzel/${colorTheme}.ini
         '';

@@ -1,6 +1,9 @@
 {
   flake.nixosModules.mangoAutostart =
     { host, config, ... }:
+    let
+      inherit (host) blueman vpn;
+    in
     {
       hjem.users.${host.userName}.files.".config/mango/autostart.sh" = {
         executable = true;
@@ -16,8 +19,8 @@
           brillo -S 80 >/dev/null 2>&1 &
 
           # tray icons
-          protonvpn-app >/dev/null 2>&1 &
-          blueman-applet >/dev/null 2>&1 &
+          ${vpn} >/dev/null 2>&1 &
+          ${blueman} >/dev/null 2>&1 &
           nm-applet >/dev/null 2>&1 &
           udiskie --appindicator -s -n -a >/dev/null 2>&1 &
 

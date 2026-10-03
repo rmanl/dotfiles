@@ -18,7 +18,7 @@
     };
 
     environment.variables = {
-      EDITOR = "nvim";
+      EDITOR = "${host.editor}";
       BROWSER = "${host.browser}";
     };
 

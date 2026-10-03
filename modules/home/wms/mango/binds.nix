@@ -2,7 +2,14 @@
   flake.nixosModules.mangoBinds =
     { host, ... }:
     let
-      inherit (host) browser userName;
+      inherit (host)
+        browser
+        fileManager
+        launcher
+        locker
+        terminal
+        userName
+        ;
       mod = "SUPER";
       modshift = "${mod}+SHIFT";
     in
@@ -10,8 +17,8 @@
       hjem.users.${userName}.files.".config/mango/binds.conf".text = ''
         # general
         bind=SUPER,r,reload_config # reload mango config
-        bind=${mod},Return,spawn,foot # open terminal
-        bind=${mod},d,spawn,fuzzel # app launcher
+        bind=${mod},Return,spawn,${terminal} # open terminal
+        bind=${mod},d,spawn,${launcher} # app launcher
         bind=${mod},Escape,spawn,powermenu # power menu
         bind=${modshift},slash,spawn_shell,codex # show codex overview
         bind=SUPER,0,toggleoverview # toggle overview
@@ -23,8 +30,8 @@
         bind=${mod},v,spawn_shell,clipmenu # clipboard history picker
         bind=${modshift},c,spawn_shell,colorpick # color picker
         bind=${mod},w,spawn,${browser} # open browser
-        bind=${mod},n,spawn,pcmanfm # file manager
-        bind=${mod}+ALT,l,spawn,hyprlock # lock screen
+        bind=${mod},n,spawn,${fileManager} # file manager
+        bind=${mod}+ALT,l,spawn,${locker} # lock screen
 
         # window
         bind=${mod},q,killclient # close focused window

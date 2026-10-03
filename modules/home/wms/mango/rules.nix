@@ -1,8 +1,20 @@
 {
   flake.nixosModules.mangoRules =
-    { host, ... }:
+    { host, lib, ... }:
     let
-      inherit (host) mangoMonitor userName;
+      inherit (host)
+        blueman
+        fileManager
+        imageViewer
+        isGaming
+        keyring
+        mangoMonitor
+        spotify
+        terminal
+        userName
+        volumeMixer
+        vpn
+        ;
     in
     {
       hjem.users.${userName}.files.".config/mango/rules.conf".text = ''
@@ -32,41 +44,40 @@
         windowrule=isfloating:1,title:^(Accounts)(.*)$
 
         # nmtui network-manager
-        windowrule=isfloating:1,width:800,height:600,appid:foot,title:^(nmtui)$
+        windowrule=isfloating:1,width:800,height:600,appid:${terminal.appId},title:^(nmtui)$
 
         # bluetooth
-        windowrule=isfloating:1,appid:.blueman-manager-wrapped
+        windowrule=isfloating:1,appid:${blueman.appId}
 
         # seahorse(gnome-keyring ui)
-        windowrule=isfloating:1,width:800,height:600,appid:org.gnome.seahorse.Application
+        windowrule=isfloating:1,width:800,height:600,appid:${keyring.appId}
 
         # volume control
-        windowrule=isfloating:1,width:800,height:600,appid:com.saivert.pwvucontrol
+        windowrule=isfloating:1,width:800,height:600,appid:${volumeMixer.appId}
 
         # pcmanfm
-        windowrule=isfloating:1,width:800,height:600,appid:pcmanfm
+        windowrule=isfloating:1,width:800,height:600,appid:${fileManager.appId}
 
         # imv image viewer
-        windowrule=isfullscreen:1,appid:imv
+        windowrule=isfullscreen:1,appid:${imageViewer.appId}
 
         # proton vpn
-        windowrule=width:450,height:800,appid:.proton-app-wrapped
+        windowrule=width:450,height:800,appid:${vpn.appId}
 
         # spotify
-        windowrule=force_tiled_state:1,istagsilent:1,tags:5,title:^([Ss]potify)(.*)$
-
+        windowrule=force_tiled_state:1,istagsilent:1,tags:5,appid:${spotify.appId}
+      ''
+      + lib.optionalString isGaming ''
         # steam
-        windowrule=force_tiled_state:1,tags:4,appid:^([Ss]team)$
-        windowrule=width:340,height:800,tags:4,title:^(Friends List)$,appid:^([Ss]team)$
+        windowrule=force_tiled_state:1,tags:4,appid:steam
+        windowrule=isfloating:1,width:340,height:800,tags:4,title:^(Friends List)$,appid:steam
+        windowrule=isfloating:1,width:600,height:700,tags:4,title:^(Steam Settings)$,appid:steam
 
         # bottles
-        windowrule=force_tiled_state:1,tags:4,title:^([Bb]ottles)(.*)$
+        windowrule=force_tiled_state:1,tags:4,appid:com.usebottles.bottles
 
         # heroic
-        windowrule=force_tiled_state:1,tags:4,title:^([Hh]eroic)(.*)$
-
-        # lutris
-        windowrule=force_tiled_state:1,tags:4,title:^([Ll]utris)(.*)$
+        windowrule=force_tiled_state:1,tags:4,appid:heroic
       '';
     };
 }

@@ -1,6 +1,6 @@
 {
   flake.nixosModules.coreSecurity =
-    { ... }:
+    { host, ... }:
     {
       security = {
         sudo.wheelNeedsPassword = false;
@@ -9,7 +9,7 @@
         rtkit.enable = true;
 
         # allow wayland lockers to unlock the screen
-        pam.services.hyprlock.text = "auth include login";
+        pam.services."${host.locker}".text = "auth include login";
       };
 
       boot = {
