@@ -21,6 +21,12 @@
           nm-applet >/dev/null 2>&1 &
           udiskie --appindicator -s -n -a >/dev/null 2>&1 &
 
+          # polkit auth agent
+          polkit-agent >/dev/null 2>&1 &
+
+          # clipboard history
+          wl-paste --watch cliphist store &
+
           # disable megacmd at boot
           megacmd --boot
 

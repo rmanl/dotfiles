@@ -134,7 +134,13 @@ Set `hostWM = "<name>"` on the target host, either as an override in that host's
 
 `host.hostWM` is also read directly in a few places that don't need changes when adding a WM: `modules/nixos/services/greetd/default.nix` (execs it directly), `modules/home/graphical/hypridle.nix` (has a WM-specific dpms branch, e.g. `"hyprland"`, that new WMs can add a case for if needed), and `modules/home/shell/zsh/zshrc.nix` (a mango-only IPC keybind that degrades gracefully for other WMs).
 
+`modules/home/graphical/scripts/codex.nix` (the `codex` launcher's "WM binds" submenu) reads `$XDG_CURRENT_DESKTOP` at runtime and generically parses `~/.config/$XDG_CURRENT_DESKTOP/{binds,scratchpads}.conf` (see "Keybind annotation convention" below) — new WMs using that same plain-text bind convention need no changes here. WMs with a native bind-introspection API (or whose `$XDG_CURRENT_DESKTOP`/config-dir naming doesn't match the generic path, e.g. Hyprland — see the `env.nix` exception below) need an explicit `case` branch added instead of relying on the generic parser.
+
 `modules/home/graphical/xdg/env.nix` sets `XDG_CURRENT_DESKTOP`/`XDG_SESSION_DESKTOP` to raw `host.hostWM`, which matches upstream convention for mango and sway (both lowercase, per their `wayland-sessions/*.desktop` `DesktopNames=`). Hyprland is the exception: keep `hostWM = "hyprland"` lowercase as usual (its own binary is a lowercase symlink to the real `Hyprland` executable, so exec/profile-lookup/IPC checks all keep working unchanged), but when adding it, change `env.nix` to override just these two vars to `"Hyprland"` for that WM (e.g. `if hostWM == "hyprland" then "Hyprland" else hostWM`) — don't add that branch until Hyprland actually exists in the repo.
+
+## Keybind annotation convention
+
+Bind config files use lowercase single-word `# category` headers (`general`, `apps`, `window`, `workspace`, `media`, `scratchpad`), binds grouped contiguously under each, with a trailing lowercase `# description` comment per bind (don't repeat the category name in it). Verify the WM's parser tolerates trailing inline comments before relying on this (confirmed for mango only). Reference: `modules/home/wms/mango/binds.nix`, `scratchpads.nix`.
 
 ## Nvidia driver build failures
 
@@ -153,17 +159,23 @@ package = config.boot.kernelPackages.nvidiaPackages.mkDriver {
 
 Leave a comment above the pin noting why `stable` failed and against which kernel the pinned version was confirmed to build. On each subsequent flake update, check whether `nvidiaPackages.stable` builds again against the new kernel — if so, comment out the pin (don't delete it) and switch back to `nvidiaPackages.stable`.
 
+## Hyprpicker nixpkgs pin
+
+`modules/home/graphical/scripts/colorpick.nix` pins `hyprpicker` to commit `7bb69515f2` ("core: migrate to ext-icc for screencopy", 2026-08-19) via `overrideAttrs` + `fetchFromGitHub`, instead of using `pkgs.hyprpicker` directly. The latest tagged release (`v0.4.7`, also what `nixpkgs` and `nixpkgs-unstable` both ship) still uses the old `zwlr-screencopy` protocol, which trips an "invalid stride" error on mango; that commit migrates to `ext-image-copy-capture-v1`, which mango supports correctly.
+
+On each flake update, check the `hyprpicker` version in both `nixpkgs#hyprpicker` and `nixpkgs-unstable#hyprpicker` — once either is newer than `0.4.7`, drop the `hyprpickerFixed` override in `colorpick.nix` and point the script at `pkgs.hyprpicker` directly (or `pkgs-unstable.hyprpicker`, per the `pkgs-unstable` convention, if unstable ships it first). Keep the rest of the script (the swatch-icon notification) — that part isn't related to the packaging pin. Once the override is dropped, delete this section.
+
 ## AppArmor on NixOS
 
 Removed from `modules/nixos/core/security/default.nix` (was `security.apparmor.enable` + `killUnconfinedConfinables` + `apparmor-profiles`/`apparmor-utils` packages) because it provided zero real confinement: upstream profiles are written for FHS paths (`/usr/lib/firefox/firefox`, `/opt/brave.com/...`) that don't exist on NixOS, and the shipped `brave`/`firefox` profiles specifically are unconfined no-op stubs regardless. A handful of NixOS *service* modules (`services.transmission`, `murmur`, `miniflux`, `lxc`) do ship real Nix-store-aware profiles via `security.apparmor.policies`, but none cover desktop GUI apps.
 
-Recheck on each new NixOS stable release (26.11, 27.05, ...) whether NixOS-native profile support has extended to desktop apps actually used here (particularly the browsers, `librewolf`/`brave`) — if so, re-add `security.apparmor.enable = true` plus the relevant `security.apparmor.policies` entries.
+Recheck on each new NixOS stable release (26.11, 27.05, ...) whether NixOS-native profile support has extended to desktop apps actually used here (particularly the browsers, `librewolf`/`brave`) — if so, re-add `security.apparmor.enable = true` plus the relevant `security.apparmor.policies` entries, then delete this section.
 
 ## Lockdown LSM on NixOS
 
 Removed from `modules/nixos/core/security/default.nix` (was `security.lsm = [ "lockdown" ]`) and `modules/nixos/core/security/_params.nix` (was `lockdown=confidentiality` kernel param) because it was never actually active: none of `linuxPackages`, `linuxPackages_zen`, or `linuxPackages_xanmod_stable` in nixpkgs build with `CONFIG_SECURITY_LOCKDOWN_LSM` set — only `_hardened` kernel variants do, and those are off the table (too restrictive for normal desktop/laptop use). Even if it did activate, lockdown's `confidentiality` mode would block loading the unsigned, out-of-tree Nvidia kernel module used here.
 
-Recheck only if switching to a kernel package that compiles in `CONFIG_SECURITY_LOCKDOWN_LSM` (verify via that kernel's `linux-config-*` derivation) — and confirm it coexists with the Nvidia module (e.g. via module signing through lanzaboote) before re-enabling.
+Recheck only if switching to a kernel package that compiles in `CONFIG_SECURITY_LOCKDOWN_LSM` (verify via that kernel's `linux-config-*` derivation) — and confirm it coexists with the Nvidia module (e.g. via module signing through lanzaboote) before re-enabling. Once re-enabled, delete this section.
 
 ## Committing changes
 

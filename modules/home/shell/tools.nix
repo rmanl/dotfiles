@@ -39,6 +39,7 @@
         ripdrag # drag pictures from terminal
         tirith # shell security
         wcalc # calculator
+        wl-clipboard # wayland clipboard cli (wl-copy/wl-paste)
         wlr-randr # wlroots output management
       ];
     };
