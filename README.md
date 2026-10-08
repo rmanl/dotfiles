@@ -113,7 +113,7 @@ lsblk -o NAME,FSTYPE,SIZE,MOUNTPOINT
 
 ```console
 sudo mkdir -p /mnt/win-efi
-sudo mount /dev/<DISK> /mnt/win-efi
+sudo mount -o ro /dev/<DISK> /mnt/win-efi
 ```
 
 **3. Copy Contents of Windows EFI to NixOS EFI**
