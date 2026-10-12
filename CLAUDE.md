@@ -79,9 +79,10 @@ Every WM's own module is responsible for rendering `host.monitor`'s fields into 
 
 ## Destructuring conventions
 
-- `host.*` and `config.*`: pull fields into `inherit (host) foo bar;` / `inherit (config) foo bar;` once there are 2+ distinct fields from that source used in the same scope, OR a single field referenced 2+ times. A single field referenced exactly once stays inline (e.g. `host.foo`) — don't introduce a binding for it.
+- Applies to any attrset being destructured, not just `host.*`/`config.*`: pull fields into `inherit (x) foo bar;` once there are 2+ distinct fields from that source used in the same scope, OR a single field referenced 2+ times. A single field referenced exactly once stays inline (e.g. `host.foo`) — don't introduce a binding for it.
 - Never consolidate `inputs.*` this way — keep flake inputs fully qualified (`inputs.nixpkgs`, `inputs.hardware`, etc.) even when a file uses several.
 - `config.hjem` always stays fully qualified too, even when it would otherwise qualify for inheriting — keeps every module that reads it back consistent with the `hjem.users.${userName} = { ... }` option-definition style used everywhere else.
+- For a source with no established precedent either way yet (first time destructuring that kind of record), raise it for discussion rather than assuming the default applies.
 
 ## Nixpkgs configuration
 
