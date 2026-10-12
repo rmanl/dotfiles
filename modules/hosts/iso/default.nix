@@ -1,20 +1,16 @@
 { self, inputs, ... }:
 let
-  host = {
-    hostName = "iso";
-    inherit (import ../_base.nix { inherit inputs; })
-      userName
-      networking
-      system
-      hashedPassword
-      ;
-    isMinimal = true;
-  };
+  inherit (import ../_base.nix { inherit inputs; })
+    userName
+    networking
+    system
+    hashedPassword
+    ;
 in
 {
   flake = {
     nixosConfigurations.iso = inputs.nixpkgs.lib.nixosSystem {
-      specialArgs = { inherit host inputs self; };
+      specialArgs = { inherit inputs self; };
       modules = [ self.nixosModules.hostIso ];
     };
 
@@ -23,17 +19,8 @@ in
         config,
         lib,
         pkgs,
-        host,
         ...
       }:
-      let
-        inherit (host)
-          userName
-          hashedPassword
-          system
-          networking
-          ;
-      in
       {
         imports = [
           "${inputs.nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
