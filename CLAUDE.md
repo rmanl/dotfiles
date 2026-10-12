@@ -69,6 +69,14 @@ The `__toString` coercion means every call site using string interpolation (`"${
 
 **Changing an app**: edit the value in `_apps.nix`. If it uses the `{ name; appId; }` form, verify the new app's real appid first — check live via `mmsg get all-clients` while it's running, or a `.desktop` file's `StartupWMClass=` field for XWayland apps.
 
+## Monitor configuration (`_monitors.nix`)
+
+Each host defines its monitor as a single structured `host.monitor` value instead of a WM-specific syntax string, built via a `mkMonitor` helper in `modules/hosts/_monitors.nix` (mirrors the `_disks.nix`/`_disko.nix` split — a generic cross-host helper imported directly by each host's own `default.nix`, not merged in automatically like `_apps.nix`, since a monitor spec is unique per host). `mkMonitor` takes `{ name; width; height; refresh; x ? 0; y ? 0; scale ? 1; vrr ? false; }` and fills in defaults for the optional fields.
+
+Every WM's own module is responsible for rendering `host.monitor`'s fields into that WM's native config syntax — the struct itself stays WM-agnostic. When adding a new WM, write a small renderer local to that WM's own config module (e.g. a `monitorRule` binding that builds a list of fragments and joins them) rather than adding rendering logic to `_monitors.nix` — this keeps `_monitors.nix` pure structured data and keeps each WM's syntax self-contained within its own profile, consistent with "Adding a new window manager" above.
+
+`vrr` is modeled as a plain bool, since every monitor/renderer in the repo so far only needs on/off. If a future WM needs more states (e.g. Hyprland's fullscreen-only VRR mode), or other fields (transform/rotation, HDR, etc.), change `_monitors.nix`'s shape only once that WM actually needs it — don't pre-model capabilities nothing in the repo uses yet.
+
 ## Destructuring conventions
 
 - `host.*` and `config.*`: pull fields into `inherit (host) foo bar;` / `inherit (config) foo bar;` once there are 2+ distinct fields from that source used in the same scope, OR a single field referenced 2+ times. A single field referenced exactly once stays inline (e.g. `host.foo`) — don't introduce a binding for it.

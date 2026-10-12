@@ -1,10 +1,15 @@
 { inputs, self, ... }:
 let
   disko = import ./_disko.nix;
+  mkMonitor = import ../_monitors.nix;
   host = import ../_base.nix { inherit inputs; } // {
     hostName = "ferrix";
-    monitorName = "eDP-1";
-    mangoMonitor = "name:^eDP-1$,width:1920,height:1080,refresh:60,x:0,y:0,scale:1,vrr:0";
+    monitor = mkMonitor {
+      name = "eDP-1";
+      width = 1920;
+      height = 1080;
+      refresh = 60;
+    };
     isLaptop = true;
   };
 in

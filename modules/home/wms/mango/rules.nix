@@ -8,18 +8,42 @@
         imageViewer
         isGaming
         keyring
-        mangoMonitor
+        monitor
         spotify
         terminal
         userName
         volumeMixer
         vpn
         ;
+
+      monitorRule =
+        let
+          inherit (monitor)
+            name
+            width
+            height
+            refresh
+            x
+            y
+            scale
+            vrr
+            ;
+        in
+        lib.concatStringsSep "," [
+          "name:^${name}$"
+          "width:${toString width}"
+          "height:${toString height}"
+          "refresh:${toString refresh}"
+          "x:${toString x}"
+          "y:${toString y}"
+          "scale:${toString scale}"
+          "vrr:${if vrr then "1" else "0"}"
+        ];
     in
     {
       hjem.users.${userName}.files.".config/mango/rules.conf".text = ''
         # monitor
-        monitorrule=${mangoMonitor}
+        monitorrule=${monitorRule}
         # layouts in mango are per tag. so we'll set all tags to tile by default.
         tagrule=id:1,layout_name:tile
         tagrule=id:2,layout_name:tile

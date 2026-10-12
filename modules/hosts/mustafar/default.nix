@@ -1,10 +1,16 @@
 { inputs, self, ... }:
 let
   disko = import ./_disko.nix;
+  mkMonitor = import ../_monitors.nix;
   host = import ../_base.nix { inherit inputs; } // {
     hostName = "mustafar";
-    monitorName = "DP-2";
-    mangoMonitor = "name:^DP-2$,width:2560,height:1440,refresh:165,x:0,y:0,scale:1,vrr:1";
+    monitor = mkMonitor {
+      name = "DP-2";
+      width = 2560;
+      height = 1440;
+      refresh = 165;
+      vrr = true;
+    };
     isDesktop = true;
     isDualBoot = true;
   };

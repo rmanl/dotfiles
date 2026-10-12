@@ -11,16 +11,15 @@
         hostWM
         isLaptop
         locker
-        monitorName
         userName
         ;
+      monitor = host.monitor.name;
       runOnce = program: "pgrep ${program} || ${program}";
       lock = "loginctl lock-session";
       brillo = lib.getExe pkgs.brillo;
 
-      dpmsOff =
-        if hostWM == "hyprland" then "hyprctl dispatch dpms off" else "wlopm --off ${monitorName}";
-      dpmsOn = if hostWM == "hyprland" then "hyprctl dispatch dpms on" else "wlopm --on ${monitorName}";
+      dpmsOff = if hostWM == "hyprland" then "hyprctl dispatch dpms off" else "wlopm --off ${monitor}";
+      dpmsOn = if hostWM == "hyprland" then "hyprctl dispatch dpms on" else "wlopm --on ${monitor}";
     in
     {
       hjem.users.${userName} = {
