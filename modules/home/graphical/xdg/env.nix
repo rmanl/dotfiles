@@ -7,7 +7,7 @@
     }:
     let
       inherit (host)
-        hostWM
+        wm
         isGaming
         isMultiDisk
         userName
@@ -20,7 +20,7 @@
           FLAKE = "$HOME/.config/frosty";
           XDG_CACHE_HOME = "$HOME/.local/cache";
           XDG_CONFIG_HOME = "$HOME/.config";
-          XDG_CURRENT_DESKTOP = hostWM;
+          XDG_CURRENT_DESKTOP = wm.xdgDesktopName;
           XDG_DATA_HOME = "$HOME/.local/share";
           XDG_STATE_HOME = "$HOME/.local/state";
           XDG_DATA_DIR = "${dataPath}";
@@ -32,7 +32,7 @@
           XDG_PROJECTS_DIR = "${dataPath}/projects";
           XDG_PUBLICSHARE_DIR = "/var/empty";
           XDG_SCREENSHOTS_DIR = "${dataPath}/stuff/pics/screenshots";
-          XDG_SESSION_DESKTOP = hostWM;
+          XDG_SESSION_DESKTOP = wm.xdgDesktopName;
           XDG_SHARED_DIR = "${dataPath}/shared";
           XDG_STUFF_DIR = "${dataPath}/stuff";
           XDG_TEMPLATES_DIR = "/var/empty";

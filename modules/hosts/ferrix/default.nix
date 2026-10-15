@@ -46,7 +46,7 @@ in
           intel
 
           # dynamic values need self to resolve at eval time
-          self.nixosModules."${host.hostWM}Wm"
+          self.nixosModules."${host.wm}Wm"
         ]);
       };
     };

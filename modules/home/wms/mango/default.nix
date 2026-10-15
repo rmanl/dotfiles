@@ -15,6 +15,7 @@
         mangoIpc
         mangoRules
         mangoScratchpads
+        mangoZshIpc
       ];
     };
 }

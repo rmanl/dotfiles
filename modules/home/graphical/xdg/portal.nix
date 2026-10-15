@@ -1,15 +1,15 @@
 {
   flake.nixosModules.xdgPortal =
-    { pkgs, ... }:
+    { host, pkgs, ... }:
     {
       xdg.portal = {
         enable = true;
         xdgOpenUsePortal = true;
-        wlr.enable = true;
+        wlr.enable = host.wm.portalBackend == "wlr";
         config.common = {
           default = [ "gtk" ];
-          "org.freedesktop.impl.portal.Screenshot" = [ "wlr" ];
-          "org.freedesktop.impl.portal.ScreenCast" = [ "wlr" ];
+          "org.freedesktop.impl.portal.Screenshot" = [ host.wm.portalBackend ];
+          "org.freedesktop.impl.portal.ScreenCast" = [ host.wm.portalBackend ];
         };
         extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
       };

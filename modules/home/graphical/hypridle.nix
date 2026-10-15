@@ -8,7 +8,7 @@
     }:
     let
       inherit (host)
-        hostWM
+        wm
         isLaptop
         locker
         userName
@@ -18,8 +18,9 @@
       lock = "loginctl lock-session";
       brillo = lib.getExe pkgs.brillo;
 
-      dpmsOff = if hostWM == "hyprland" then "hyprctl dispatch dpms off" else "wlopm --off ${monitor}";
-      dpmsOn = if hostWM == "hyprland" then "hyprctl dispatch dpms on" else "wlopm --on ${monitor}";
+      dpmsCmd = lib.replaceStrings [ "%MONITOR%" ] [ monitor ];
+      dpmsOff = dpmsCmd wm.dpmsOffCmd;
+      dpmsOn = dpmsCmd wm.dpmsOnCmd;
     in
     {
       hjem.users.${userName} = {
