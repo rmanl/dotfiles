@@ -21,9 +21,6 @@
         bind=${mod},d,spawn,${launcher} # app launcher
         bind=${mod},Escape,spawn,powermenu # power menu
         bind=${modshift},slash,spawn_shell,codex # show codex overview
-        bind=SUPER,0,toggleoverview # toggle overview
-        gesturebind=none,up,4,toggleoverview # toggle overview (4-finger swipe)
-        gesturebind=none,down,4,toggleoverview # toggle overview (4-finger swipe)
 
         # apps
         bind=${mod},F12,spawn_shell,prtscr # screenshot menu
