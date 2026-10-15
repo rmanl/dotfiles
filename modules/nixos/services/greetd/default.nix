@@ -11,7 +11,7 @@
       inherit (host) wm userName;
       session = ''${pkgs.bash}/bin/bash -c "source ${
         config.hjem.users.${userName}.environment.loadEnv
-      } && exec ${wm} > /dev/null"'';
+      } && exec ${wm.startCmd} > /dev/null"'';
       orderOffset = config.security.pam.services.greetd.rules.session.gnome_keyring.order - 1;
     in
     {

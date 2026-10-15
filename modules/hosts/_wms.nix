@@ -8,6 +8,13 @@ let
       xdgDesktopName = "mango";
       portalBackend = "wlr";
     };
+    hyprland = {
+      xdgDesktopName = "Hyprland";
+      portalBackend = "hyprland";
+      dpmsOnCmd = "hyprctl dispatch dpms on";
+      dpmsOffCmd = "hyprctl dispatch dpms off";
+      startCmd = "start-hyprland";
+    };
   };
 in
 builtins.mapAttrs (
@@ -15,6 +22,7 @@ builtins.mapAttrs (
   (default // value)
   // {
     inherit name;
+    startCmd = value.startCmd or name;
     __toString = self: self.name;
   }
 ) wms
