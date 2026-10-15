@@ -12,10 +12,9 @@
         mangoBinds
         mangoConfig
         mangoEnv
-        mangoIpc
         mangoRules
         mangoScratchpads
-        mangoZshIpc
+        mangoWmctl
       ];
     };
 }

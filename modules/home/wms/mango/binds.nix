@@ -16,7 +16,6 @@
     {
       hjem.users.${userName}.files.".config/mango/binds.conf".text = ''
         # general
-        bind=SUPER,r,reload_config # reload mango config
         bind=${mod},Return,spawn,${terminal} # open terminal
         bind=${mod},d,spawn,${launcher} # app launcher
         bind=${mod},Escape,spawn,powermenu # power menu

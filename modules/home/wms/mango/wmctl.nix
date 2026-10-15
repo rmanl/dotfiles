@@ -1,8 +1,8 @@
 {
-  flake.nixosModules.mangoIpc =
+  flake.nixosModules.mangoWmctl =
     { host, pkgs, ... }:
     let
-      ipc = pkgs.writeShellScriptBin "ipc" ''
+      wmctl = pkgs.writeShellScriptBin "wmctl" ''
         set -euo pipefail
 
         snapshot_menu() {
@@ -46,12 +46,14 @@
         main_menu() {
           choice=$(printf "%s\n" \
             "snapshot (get state)" \
-            "watch (live updates)" |
-            fuzzel -d -p "󰒋 mango ipc: ") || return 1
+            "watch (live updates)" \
+            "reload config" |
+            fuzzel -d -p "󰒋 mango wmctl: ") || return 1
 
           case "$choice" in
           "snapshot (get state)") snapshot_menu return 0 ;;
           "watch (live updates)") watch_menu return 0 ;;
+          "reload config") mmsg dispatch reload_config ;;
           esac
         }
 
@@ -65,6 +67,25 @@
       '';
     in
     {
-      hjem.users.${host.userName}.packages = [ ipc ];
+      hjem.users.${host.userName} = {
+        packages = [ wmctl ];
+        files.".config/zsh/.zshrc".text = ''
+          # reload mango config
+          function reload() {
+            mmsg dispatch reload_config
+          }
+
+          # M-i wmctl
+          function wmctl_run() {
+            exec </dev/tty
+            exec <&1
+            wmctl
+            zle reset-prompt > /dev/null 2>&1 || true
+          }
+          zle -N wmctl_run
+          bindkey -M viins '\ei' wmctl_run
+          bindkey -M vicmd '\ei' wmctl_run
+        '';
+      };
     };
 }
