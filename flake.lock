@@ -183,10 +183,10 @@
     },
     "nix-secrets": {
       "locked": {
-        "lastModified": 1786891493,
-        "narHash": "sha256-oiQ8Pn97XdgVlZfMneq7XX+WO7tOaY02OPH348UEEQ0=",
+        "lastModified": 1792180287,
+        "narHash": "sha256-UIIV4k4Eoibb7uuegGgJSFJ1W/GxbYsW4rr5vwOAtfE=",
         "ref": "main",
-        "rev": "1ba9314cad90cf5c997bde54b904f2dd4549c5f4",
+        "rev": "61642d80104edd1ac5363fb9c2cafca447fd91c0",
         "shallow": true,
         "type": "git",
         "url": "ssh://git@github.com/rmanl/nix-secrets.git"

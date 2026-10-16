@@ -11,6 +11,7 @@ let
       refresh = 165;
       vrr = true;
     };
+    wallpaper = "moon";
     isDesktop = true;
     isGaming = true;
     isMultiDisk = true;

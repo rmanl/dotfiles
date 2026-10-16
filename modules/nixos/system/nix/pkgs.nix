@@ -11,6 +11,7 @@
         "claude-code"
         "spotify"
         "steam"
+        "steam-unwrapped"
         "unrar"
       ];
       isCudaEula =
@@ -24,7 +25,10 @@
         let
           name = pkg.pname or pkg.name;
         in
-        builtins.elem name allowedUnfree || lib.hasPrefix "nvidia" name || isCudaEula pkg;
+        builtins.elem name allowedUnfree
+        || lib.hasPrefix "nvidia" name
+        || lib.hasPrefix "xone-dongle-firmware" name
+        || isCudaEula pkg;
     in
     {
       nixpkgs.config.allowUnfreePredicate = isUnfree;

@@ -186,7 +186,7 @@
             }
 
             window#waybar {
-              background-color: rgba(${theme.toRGB colors.base00},0);
+              background-color: rgba(${theme.toRGB colors.base00},0.1);
               color: ${base06};
               font-size: 16px;
               transition-property: background-color;

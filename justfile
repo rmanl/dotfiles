@@ -38,8 +38,12 @@ upgrade: update rebuild
 bootstrap *ARGS:
   #!/usr/bin/env bash
   set -euo pipefail
-  read -rp "Target hostname: " hostname
-  read -rp "Target IP: " ip
+  source scripts/helpers.sh
+  while true; do
+    read -rp "Target hostname: " hostname
+    read -rp "Target IP: " ip
+    yes_or_no "Confirm hostname='$hostname', IP='$ip'?" && break
+  done
   BOOTSTRAP_USER=rma BOOTSTRAP_SSH_PORT=22 BOOTSTRAP_SSH_KEY="$HOME/.ssh/id_rma" scripts/bootstrap-nixos.sh -n "$hostname" -d "$ip" {{ARGS}}
 
 [group("building")]

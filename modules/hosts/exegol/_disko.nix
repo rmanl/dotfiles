@@ -1,6 +1,6 @@
 {
   module =
-    { host, lib, ... }:
+    { lib, ... }:
     lib.recursiveUpdate
       ((import ../_disks.nix).btrfsLuks {
         disk = "/dev/disk/by-id/nvme-eui.002538554140fdb5"; # 250GB
@@ -22,7 +22,7 @@
                     settings = {
                       allowDiscards = true;
                     };
-                    initrdUnlock = if host.isMinimal then true else false;
+                    initrdUnlock = true;
                     content = {
                       type = "btrfs";
                       extraArgs = [
@@ -58,7 +58,7 @@
                     type = "luks";
                     name = "encryptedgames";
                     passwordFile = "/tmp/disko-password";
-                    initrdUnlock = if host.isMinimal then true else false;
+                    initrdUnlock = true;
                     settings = {
                       allowDiscards = true;
                     };
