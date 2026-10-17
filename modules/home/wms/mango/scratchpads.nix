@@ -14,17 +14,17 @@
     in
     {
       hjem.users.${host.userName}.files.".config/mango/scratchpads.conf".text = ''
-        scratchpadcolor=0x${config.colors.base0F}ff
+        scratchpad_color=0x${config.colors.base0F}ff
 
         # scratchpad
         bind=${mod},backslash,toggle_named_scratchpad,foot-term,none,${terminal} -a foot-term # toggle terminal
-        windowrule=isfloating:1,isnamedscratchpad:1,width:${scratchWidth},height:${scratchHeight},appid:foot-term
+        window_rule=is_floating:1,is_named_scratchpad:1,width:${scratchWidth},height:${scratchHeight},app_id:foot-term
 
         bind=${mod}+SHIFT,n,toggle_named_scratchpad,foot-felix,none,${terminal} -a foot-felix -e ${tuiFileManager} # toggle file manager
-        windowrule=isfloating:1,isnamedscratchpad:1,width:${scratchWidth},height:${scratchHeight},appid:foot-felix
+        window_rule=is_floating:1,is_named_scratchpad:1,width:${scratchWidth},height:${scratchHeight},app_id:foot-felix
 
         bind=${mod},c,toggle_named_scratchpad,foot-calc,none,${terminal} -a foot-calc -e ${calculator} # toggle calculator
-        windowrule=isfloating:1,isnamedscratchpad:1,width:450,height:600,appid:foot-calc
+        window_rule=is_floating:1,is_named_scratchpad:1,width:450,height:600,app_id:foot-calc
       '';
     };
 }

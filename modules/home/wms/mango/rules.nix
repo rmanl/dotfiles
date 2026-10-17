@@ -34,65 +34,65 @@
     {
       hjem.users.${userName}.files.".config/mango/rules.conf".text = ''
         # monitor
-        monitorrule=${monitorRule}
+        monitor_rule=${monitorRule}
         # layouts in mango are per tag. so we'll set all tags to tile by default.
-        tagrule=id:1,layout_name:tile
-        tagrule=id:2,layout_name:tile
-        tagrule=id:3,layout_name:tile
-        tagrule=id:4,layout_name:tile
-        tagrule=id:5,layout_name:tile
-        tagrule=id:6,layout_name:tile
-        tagrule=id:7,layout_name:tile
-        tagrule=id:8,layout_name:tile
-        tagrule=id:9,layout_name:tile
+        tag_rule=id:1,layout_name:tile
+        tag_rule=id:2,layout_name:tile
+        tag_rule=id:3,layout_name:tile
+        tag_rule=id:4,layout_name:tile
+        tag_rule=id:5,layout_name:tile
+        tag_rule=id:6,layout_name:tile
+        tag_rule=id:7,layout_name:tile
+        tag_rule=id:8,layout_name:tile
+        tag_rule=id:9,layout_name:tile
 
         # screenshot fix
-        layerrule=noblur:1,layer_name:selection
+        layer_rule=no_blur:1,layer_name:selection
 
         # dialogs
-        windowrule=isfloating:1,title:^(Open File)(.*)$
-        windowrule=isfloating:1,title:^(Select a File)(.*)$
-        windowrule=isfloating:1,title:^(Choose wallpaper)(.*)$
-        windowrule=isfloating:1,title:^(Open Folder)(.*)$
-        windowrule=isfloating:1,title:^(Save As)(.*)$
-        windowrule=isfloating:1,title:^(Library)(.*)$
-        windowrule=isfloating:1,title:^(Accounts)(.*)$
+        window_rule=is_floating:1,title:^(Open File)(.*)$
+        window_rule=is_floating:1,title:^(Select a File)(.*)$
+        window_rule=is_floating:1,title:^(Choose wallpaper)(.*)$
+        window_rule=is_floating:1,title:^(Open Folder)(.*)$
+        window_rule=is_floating:1,title:^(Save As)(.*)$
+        window_rule=is_floating:1,title:^(Library)(.*)$
+        window_rule=is_floating:1,title:^(Accounts)(.*)$
 
         # nmtui network-manager
-        windowrule=isfloating:1,width:800,height:600,appid:${terminal.appId},title:^(nmtui)$
+        window_rule=is_floating:1,width:800,height:600,app_id:${terminal.appId},title:^(nmtui)$
 
         # bluetooth
-        windowrule=isfloating:1,appid:${blueman.appId}
+        window_rule=is_floating:1,app_id:${blueman.appId}
 
         # seahorse(gnome-keyring ui)
-        windowrule=isfloating:1,width:800,height:600,appid:${keyring.appId}
+        window_rule=is_floating:1,width:800,height:600,app_id:${keyring.appId}
 
         # volume control
-        windowrule=isfloating:1,width:800,height:600,appid:${volumeMixer.appId}
+        window_rule=is_floating:1,width:800,height:600,app_id:${volumeMixer.appId}
 
         # pcmanfm
-        windowrule=isfloating:1,width:800,height:600,appid:${fileManager.appId}
+        window_rule=is_floating:1,width:800,height:600,app_id:${fileManager.appId}
 
         # imv image viewer
-        windowrule=isfullscreen:1,appid:${imageViewer.appId}
+        window_rule=is_fullscreen:1,app_id:${imageViewer.appId}
 
         # proton vpn
-        windowrule=width:450,height:800,appid:${vpn.appId}
+        window_rule=width:450,height:800,app_id:${vpn.appId}
 
         # spotify
-        windowrule=force_tiled_state:1,istagsilent:1,tags:5,appid:${spotify.appId}
+        window_rule=force_tiled_state:1,is_tag_silent:1,tags:5,app_id:${spotify.appId}
       ''
       + lib.optionalString isGaming ''
         # steam
-        windowrule=force_tiled_state:1,tags:4,appid:steam
-        windowrule=isfloating:1,width:340,height:800,tags:4,title:^(Friends List)$,appid:steam
-        windowrule=isfloating:1,width:600,height:700,tags:4,title:^(Steam Settings)$,appid:steam
+        window_rule=force_tiled_state:1,tags:4,app_id:steam
+        window_rule=is_floating:1,width:340,height:800,tags:4,title:^(Friends List)$,app_id:steam
+        window_rule=is_floating:1,width:600,height:700,tags:4,title:^(Steam Settings)$,app_id:steam
 
         # bottles
-        windowrule=force_tiled_state:1,tags:4,appid:com.usebottles.bottles
+        window_rule=force_tiled_state:1,tags:4,app_id:com.usebottles.bottles
 
         # heroic
-        windowrule=force_tiled_state:1,tags:4,appid:heroic
+        window_rule=force_tiled_state:1,tags:4,app_id:heroic
       '';
     };
 }

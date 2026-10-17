@@ -8,7 +8,7 @@
     {
       hjem.users.${host.userName}.files.".config/mango/config.conf".text = ''
         # autostart
-        exec-once=~/.config/mango/autostart.sh
+        exec_once=~/.config/mango/autostart.sh
 
         # effect
         blur=1
@@ -28,7 +28,7 @@
         shadows_blur=15
         shadows_position_x=0
         shadows_position_y=0
-        shadowscolor= 0x${c.base00}ff
+        shadows_color= 0x${c.base00}ff
 
         border_radius=0
         no_radius_when_single=0
@@ -40,21 +40,21 @@
 
         # master-stack layout settings
         new_is_master=0
-        smartgaps=0
-        default_mfact=0.55
-        default_nmaster=1
+        smart_gaps=0
+        default_master_factor=0.55
+        default_master_count=1
 
         # overview settings
         enable_hotarea=0
 
         # misc
         xwayland_persistence=1
-        syncobj_enable=0
+        sync_obj_enable=0
         no_border_when_single=0
         axis_bind_apply_timeout=100
         focus_on_activate=1
-        sloppyfocus=1
-        warpcursor=1
+        sloppy_focus=1
+        warp_cursor=1
         focus_cross_monitor=0
         focus_cross_tag=0
         circle_layout=tile,scroller
@@ -69,7 +69,7 @@
         # keyboard
         repeat_rate=25
         repeat_delay=600
-        numlockon=0
+        numlock_on=0
         xkb_rules_layout=us
         xkb_rules_options=caps:escape_shifted_capslock
 
@@ -93,16 +93,16 @@
         # scroll_method=1
 
         # appearance
-        gappih=0
-        gappiv=0
-        gappoh=0
-        gappov=0
-        borderpx=1
-        rootcolor=0x${c.base02}ff
-        bordercolor=0x${c.base01}ff
-        focuscolor=0x${c.base0C}ff
-        maximizescreencolor=0x${c.base0C}ff
-        urgentcolor=0x${c.base08}ff
+        gap_inner_horizontal=0
+        gap_inner_vertical=0
+        gap_outer_horizontal=0
+        gap_outer_vertical=0
+        border_px=1
+        root_color=0x${c.base02}ff
+        border_color=0x${c.base01}ff
+        focus_color=0x${c.base0C}ff
+        maximized_screen_color=0x${c.base0C}ff
+        urgent_color=0x${c.base08}ff
 
         # sub config load
         source=~/.config/mango/binds.conf
