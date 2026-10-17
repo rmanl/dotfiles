@@ -1,3 +1,40 @@
+let
+  espPartition = {
+    priority = 1;
+    name = "ESP";
+    size = "512M";
+    type = "EF00";
+    content = {
+      type = "filesystem";
+      format = "vfat";
+      mountpoint = "/boot";
+      mountOptions = [ "defaults" ];
+    };
+  };
+  commonSubvolumes = {
+    "@root" = {
+      mountpoint = "/";
+      mountOptions = [
+        "compress=zstd"
+        "noatime"
+      ];
+    };
+    "@nix" = {
+      mountpoint = "/nix";
+      mountOptions = [
+        "compress=zstd"
+        "noatime"
+      ];
+    };
+    "@log" = {
+      mountpoint = "/var/log";
+      mountOptions = [
+        "compress=zstd"
+        "noatime"
+      ];
+    };
+  };
+in
 {
   btrfs = { disk }: {
     disko.devices = {
@@ -8,18 +45,7 @@
           content = {
             type = "gpt";
             partitions = {
-              ESP = {
-                priority = 1;
-                name = "ESP";
-                size = "512M";
-                type = "EF00";
-                content = {
-                  type = "filesystem";
-                  format = "vfat";
-                  mountpoint = "/boot";
-                  mountOptions = [ "defaults" ];
-                };
-              };
+              ESP = espPartition;
               root = {
                 size = "100%";
                 content = {
@@ -29,29 +55,7 @@
                     "nixos"
                     "-f"
                   ];
-                  subvolumes = {
-                    "@root" = {
-                      mountpoint = "/";
-                      mountOptions = [
-                        "compress=zstd"
-                        "noatime"
-                      ];
-                    };
-                    "@nix" = {
-                      mountpoint = "/nix";
-                      mountOptions = [
-                        "compress=zstd"
-                        "noatime"
-                      ];
-                    };
-                    "@log" = {
-                      mountpoint = "/var/log";
-                      mountOptions = [
-                        "compress=zstd"
-                        "noatime"
-                      ];
-                    };
-                  };
+                  subvolumes = commonSubvolumes;
                 };
               };
             };
@@ -73,18 +77,7 @@
             content = {
               type = "gpt";
               partitions = {
-                ESP = {
-                  priority = 1;
-                  name = "ESP";
-                  size = "512M";
-                  type = "EF00";
-                  content = {
-                    type = "filesystem";
-                    format = "vfat";
-                    mountpoint = "/boot";
-                    mountOptions = [ "defaults" ];
-                  };
-                };
+                ESP = espPartition;
                 luks = {
                   size = "100%";
                   content = {
@@ -101,29 +94,7 @@
                         "nixos"
                         "-f"
                       ];
-                      subvolumes = {
-                        "@root" = {
-                          mountpoint = "/";
-                          mountOptions = [
-                            "compress=zstd"
-                            "noatime"
-                          ];
-                        };
-                        "@nix" = {
-                          mountpoint = "/nix";
-                          mountOptions = [
-                            "compress=zstd"
-                            "noatime"
-                          ];
-                        };
-                        "@log" = {
-                          mountpoint = "/var/log";
-                          mountOptions = [
-                            "compress=zstd"
-                            "noatime"
-                          ];
-                        };
-                      };
+                      subvolumes = commonSubvolumes;
                     };
                   };
                 };

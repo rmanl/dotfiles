@@ -187,9 +187,15 @@ Leave a comment above the pin noting why `stable` failed and against which kerne
 
 ## Hyprpicker nixpkgs pin
 
-`modules/home/graphical/scripts/colorpick.nix` pins `hyprpicker` to commit `7bb69515f2` ("core: migrate to ext-icc for screencopy", 2026-08-19) via `overrideAttrs` + `fetchFromGitHub`, instead of using `pkgs.hyprpicker` directly. The latest tagged release (`v0.4.7`, also what `nixpkgs` and `nixpkgs-unstable` both ship) still uses the old `zwlr-screencopy` protocol, which trips an "invalid stride" error on mango; that commit migrates to `ext-image-copy-capture-v1`, which mango supports correctly.
+`modules/home/graphical/scripts/colorpick.nix` pins `hyprpicker` to commit `5c451cb4e9` (2026-09-01) via `overrideAttrs` + `fetchFromGitHub`, instead of using `pkgs.hyprpicker` directly. The latest tagged release (`v0.4.7`, also what `nixpkgs` and `nixpkgs-unstable` both ship) still uses the old `zwlr-screencopy` protocol, which trips an "invalid stride" error on mango; the pinned commit includes an earlier fix that migrates to `ext-image-copy-capture-v1`, which mango supports correctly.
 
 On each flake update, check the `hyprpicker` version in both `nixpkgs#hyprpicker` and `nixpkgs-unstable#hyprpicker` — once either is newer than `0.4.7`, drop the `hyprpickerFixed` override in `colorpick.nix` and point the script at `pkgs.hyprpicker` directly (or `pkgs-unstable.hyprpicker`, per the `pkgs-unstable` convention, if unstable ships it first). Keep the rest of the script (the swatch-icon notification) — that part isn't related to the packaging pin. Once the override is dropped, delete this section.
+
+## Mango nixpkgs-unstable pin
+
+`modules/home/wms/mango/default.nix` installs `mango` from `pkgs-unstable.mango` instead of `pkgs.mango` because it isn't packaged in stable nixpkgs at all yet (confirmed via `nix eval nixpkgs#mango` — no such attribute). Default preference is stable; this is only on unstable because stable has no package to fall back to.
+
+On each flake update, check whether `pkgs.mango` (stable) now exists — if so, and its version is equal to or newer than the currently-installed `pkgs-unstable.mango` version, switch `mango/default.nix` to `pkgs.mango` and drop the `pkgs-unstable` arg from that module. Once switched, delete this section.
 
 ## AppArmor on NixOS
 

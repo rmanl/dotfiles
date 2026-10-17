@@ -7,7 +7,7 @@
       ...
     }:
     let
-      aliasBlock = import ./_aliasBlock.nix { inherit lib; };
+      aliasBlock = import ./_aliasBlock.nix { inherit lib host; };
     in
     {
       hjem.users.${host.userName} = {

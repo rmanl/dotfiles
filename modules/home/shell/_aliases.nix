@@ -1,4 +1,4 @@
-{
+host: {
   cat = "bat";
   diff = "batdiff";
 
@@ -30,7 +30,7 @@
   gitl = "git log";
 
   #------------editor------------
-  v = "nvim";
+  v = host.editor;
   suv = "sudoedit";
 
   #------------confirmations------------

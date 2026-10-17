@@ -14,7 +14,7 @@
         tuiFileManager
         userName
         ;
-      aliasBlock = import ../_aliasBlock.nix { inherit lib; };
+      aliasBlock = import ../_aliasBlock.nix { inherit lib host; };
       c = config.colors;
     in
     {

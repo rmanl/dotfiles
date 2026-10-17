@@ -8,7 +8,7 @@
       ...
     }:
     let
-      aliases = import ../../shell/_aliases.nix;
+      aliases = import ../../shell/_aliases.nix host;
       aliasPairs = lib.concatStringsSep "\n" (lib.mapAttrsToList (name: cmd: "${name}\t${cmd}") aliases);
 
       themeColors = lib.filterAttrs (
