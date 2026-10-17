@@ -1,0 +1,33 @@
+name: check
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - flake.lock
+  schedule:
+    - cron: "0 6 * * 1" # weekly, Monday 06:00 UTC
+  workflow_dispatch: {}
+
+jobs:
+  flake-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+
+      - name: nix flake check (private inputs stubbed)
+        env:
+          NIXPKGS_ALLOW_UNFREE: "1"
+        run: |
+          nix flake check \
+            --impure \
+            --keep-going \
+            --show-trace \
+            --override-input nix-secrets path:./ci/stubs/nix-secrets \
+            --override-input monolisa path:./ci/stubs/monolisa \
+            --override-input themes path:./ci/stubs/themes

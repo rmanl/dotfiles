@@ -16,17 +16,18 @@ else
 fi
 switch_args="$switch_args .#$HOST switch"
 
-green "====== REBUILD ======"
-if command -v nh &>/dev/null; then
-  REPO_PATH=$PWD
-  export REPO_PATH
-  nh os switch .#"$HOST" -- --impure --show-trace
-else
-  sudo nixos-rebuild "$switch_args"
-fi
+do_rebuild() {
+  if command -v nh &>/dev/null; then
+    REPO_PATH=$PWD
+    export REPO_PATH
+    nh os switch .#"$HOST" -- --impure --show-trace
+  else
+    sudo nixos-rebuild "$switch_args"
+  fi
+}
 
-# shellcheck disable=SC2181
-if [ $? -eq 0 ]; then
+green "====== REBUILD ======"
+if do_rebuild; then
   green "====== POST-REBUILD ======"
   green "Rebuilt successfully"
 

@@ -150,10 +150,31 @@
           return 2
         }
 
+        show_notifications() {
+          local sel history count copy
+          history=$(makoctl history -j)
+          count=$(${pkgs.jq}/bin/jq 'length' <<< "$history")
+
+          if [[ "$count" -eq 0 ]]; then
+            notify-send -u normal -t 2000 "Notification history" "No notifications in history"
+            return 0
+          fi
+
+          sel=$(${pkgs.jq}/bin/jq -r '.[] | (.body // .summary)' <<< "$history" \
+            | fuzzel -d -l "$count" -p "History: ") || sel=""
+          [[ -z "$sel" ]] && return 0
+
+          copy=$(printf '%s' "$sel" | sed -n "s/.*'\\(.*\\)'.*/\\1/p")
+          [[ -z "$copy" ]] && copy="$sel"
+
+          printf '%s' "$copy" | wl-copy
+          return 2
+        }
+
         wm_label="$(echo "$XDG_CURRENT_DESKTOP" | awk '{print toupper(substr($0,1,1)) substr($0,2)}') binds"
 
         while true; do
-          choice=$(printf '%s\nShell binds\nTheme\n' "$wm_label" | fuzzel -d -p "📖 Codex: ") || choice=""
+          choice=$(printf '%s\nShell binds\nTheme\nNotifications\n' "$wm_label" | fuzzel -d -p "📖 Codex: ") || choice=""
           [[ -z "$choice" ]] && exit 0
 
           rc=0
@@ -161,6 +182,7 @@
             "$wm_label") show_wm_binds || rc=$? ;;
             "Shell binds") show_shell || rc=$? ;;
             "Theme") show_theme || rc=$? ;;
+            "Notifications") show_notifications || rc=$? ;;
           esac
           [[ $rc -eq 2 ]] && exit 0
         done

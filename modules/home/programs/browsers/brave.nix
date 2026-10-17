@@ -17,9 +17,32 @@
         BraveWalletDisabled = true;
         BraveWaybackMachineEnabled = false;
         BraveWebDiscoveryEnabled = false;
+        DefaultBrowserSettingEnabled = false;
         DefaultSearchProviderEnabled = true;
         DefaultSearchProviderSearchURL = "https://duckduckgo.com/?q={searchTerms}";
         DefaultSearchProviderSuggestURL = "https://duckduckgo.com/ac/?q={searchTerms}&type=list";
+        SiteSearchSettings = [
+          {
+            name = "YouTube";
+            shortcut = "!yt";
+            url = "https://www.youtube.com/results?search_query={searchTerms}";
+          }
+          {
+            name = "MyNixOS";
+            shortcut = "!ns";
+            url = "https://mynixos.com/search?q={searchTerms}";
+          }
+          {
+            name = "NixOS Pkgs";
+            shortcut = "!np";
+            url = "https://search.nixos.org/packages?type=packages&query={searchTerms}";
+          }
+          {
+            name = "NixOS Wiki";
+            shortcut = "!nw";
+            url = "https://wiki.nixos.org/w/index.php?search={searchTerms}";
+          }
+        ];
         EncryptedMediaExtensions = {
           Enabled = true;
           Locked = false;
@@ -67,29 +90,6 @@
 
       hjem.users.${host.userName} = {
         packages = [ pkgs.brave ];
-        systemd.services."brave-search-engines" = {
-          description = "Seed Brave custom search engine shortcuts";
-          wantedBy = [ "default.target" ];
-          serviceConfig.Type = "oneshot";
-          path = [ pkgs.sqlite ];
-          script = ''
-            DB="$HOME/.config/BraveSoftware/Brave-Browser/Default/Web Data"
-
-            if [ ! -f "$DB" ]; then
-              exit 0
-            fi
-
-            sqlite3 "$DB" <<SQL
-              INSERT OR IGNORE INTO keywords
-                (short_name, keyword, url, favicon_url, safe_for_autoreplace, date_created)
-              VALUES
-                ('YouTube',    '!yt',  'https://www.youtube.com/results?search_query={searchTerms}',                           'https://youtube.com/favicon.ico', 0, strftime('%s','now')),
-                ('MyNixOS',    '!ns',  'https://mynixos.com/search?q={searchTerms}',                                           'https://mynixos.com/favicon.ico', 0, strftime('%s','now')),
-                ('NixOS Pkgs', '!np',  'https://search.nixos.org/packages?type=packages&query={searchTerms}',                  'https://search.nixos.org/favicon.ico', 0, strftime('%s','now')),
-                ('NixOS Wiki', '!nw',  'https://wiki.nixos.org/w/index.php?search={searchTerms}',                              'https://wiki.nixos.org/favicon.ico', 0, strftime('%s','now'));
-            SQL
-          '';
-        };
       };
     };
 }

@@ -30,6 +30,7 @@
           icons=true
           margin=12,12,6
           markup=true
+          max-history=25
           max-icon-size=48
           max-visible=3
           padding=12
