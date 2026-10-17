@@ -6,8 +6,11 @@
       pkgs,
       ...
     }:
+    let
+      inherit (host) isLaptop userName;
+    in
     {
-      hjem.users.${host.userName} = {
+      hjem.users.${userName} = {
         packages = [ pkgs.fastfetch ];
         files.".config/fastfetch/config.jsonc" = {
           generator = (pkgs.formats.json { }).generate "config.jsonc";
@@ -48,7 +51,7 @@
               "swap"
               "disk"
             ]
-            ++ lib.optionals host.isLaptop [
+            ++ lib.optionals isLaptop [
               "battery"
               "poweradapter"
             ]

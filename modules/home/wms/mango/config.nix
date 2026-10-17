@@ -3,9 +3,10 @@
     { host, config, ... }:
     let
       inherit (config.theme) cursorName cursorSize;
+      c = config.colors;
     in
     {
-      hjem.users.${host.userName}.files.".config/mango/config.conf".text = with config.colors; ''
+      hjem.users.${host.userName}.files.".config/mango/config.conf".text = ''
         # autostart
         exec-once=~/.config/mango/autostart.sh
 
@@ -27,7 +28,7 @@
         shadows_blur=15
         shadows_position_x=0
         shadows_position_y=0
-        shadowscolor= 0x${base00}ff
+        shadowscolor= 0x${c.base00}ff
 
         border_radius=0
         no_radius_when_single=0
@@ -97,11 +98,11 @@
         gappoh=0
         gappov=0
         borderpx=1
-        rootcolor=0x${base02}ff
-        bordercolor=0x${base01}ff
-        focuscolor=0x${base0C}ff
-        maximizescreencolor=0x${base0C}ff
-        urgentcolor=0x${base08}ff
+        rootcolor=0x${c.base02}ff
+        bordercolor=0x${c.base01}ff
+        focuscolor=0x${c.base0C}ff
+        maximizescreencolor=0x${c.base0C}ff
+        urgentcolor=0x${c.base08}ff
 
         # sub config load
         source=~/.config/mango/binds.conf

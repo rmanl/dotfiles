@@ -1,15 +1,18 @@
 {
   flake.nixosModules.pcmanfm =
     { host, pkgs, ... }:
+    let
+      inherit (host) userName;
+    in
     {
-      hjem.users.${host.userName} = {
+      hjem.users.${userName} = {
         packages = [ pkgs.pcmanfm ];
 
         files = {
           ".config/gtk-3.0/bookmarks".text = ''
-            file:///home/${host.userName} ${host.userName}
-            file:///home/${host.userName}/.config/frosty frosty
-            file:///home/${host.userName}/downloads downloads
+            file:///home/${userName} ${userName}
+            file:///home/${userName}/.config/frosty frosty
+            file:///home/${userName}/downloads downloads
           '';
 
           ".config/pcmanfm/default/pcmanfm.conf".text = ''

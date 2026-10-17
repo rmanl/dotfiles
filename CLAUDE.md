@@ -48,7 +48,7 @@ Never add `home` to the host attrset. Always derive it inline as `"/home/${host.
 
 ## Host properties
 
-Always use `host.*` from `specialArgs` for host-level properties (`isLaptop`, `isGaming`, `isMinimal`, `hostWM`, etc.). Never use NixOS options or a `hostSpec` module for these — follow the dendritic pattern.
+Always use `host.*` from `specialArgs` for host-level properties (`isLaptop`, `isGaming`, `isMinimal`, `wm`, etc.). Never use NixOS options or a `hostSpec` module for these — follow the dendritic pattern.
 
 ## Swappable app identities (`_apps.nix`)
 
@@ -79,10 +79,18 @@ Every WM's own module is responsible for rendering `host.monitor`'s fields into 
 
 ## Destructuring conventions
 
-- Applies to any attrset being destructured, not just `host.*`/`config.*`: pull fields into `inherit (x) foo bar;` once there are 2+ distinct fields from that source used in the same scope, OR a single field referenced 2+ times. A single field referenced exactly once stays inline (e.g. `host.foo`) — don't introduce a binding for it.
+- Applies to any attrset being destructured, not just `host.*`/`config.*`: a field becomes a *candidate* for `inherit (x) foo bar;` once there are 2+ distinct fields from that source used in the same scope, OR a single field referenced 2+ times. A single field referenced exactly once stays inline (e.g. `host.foo`) — don't introduce a binding for it.
+- Clearing that threshold makes a field a candidate, not a mandate — weigh the actual payoff before adding a binding:
+  - **Prefix length**: a short prefix (`wm.`, `cfg.`) repeated only 2x often costs more in added lines than it saves. A longer prefix (`monitor.`, `host.wm.`, `config.colors.`) clearly pays for itself.
+  - **Clustering**: fields used right next to each other in one dense block benefit a lot (e.g. the 8-field `hl.monitor`/`monitorrule` renderers). Fields scattered far apart in a large file don't — there's no visual repetition to clean up, even if they technically clear the threshold.
+- For a block using many fields (roughly 5+) from one source, or where the source itself is a verbose expression (e.g. `config.users.users.${userName}`), prefer a short named alias over listing every field: `let m = monitor; in ... m.width ...` rather than a long `inherit (monitor) name width height ...;` list. Keep the alias short but meaningful — only shrink it to a single letter when the source's own name is what's being abbreviated for brevity (`monitor` → `m`); don't single-letter a name that's already short and descriptive (keep `user`, not `u`). This still beats `with monitor;`, which hides the field's origin entirely and risks silent shadowing. This only applies to a *nested* record whose fields get dot-accessed repeatedly within one isolated block (e.g. `monitor`'s 8 fields inside the `hl.monitor`/`monitorrule` render, or `config.users.users.${userName}`'s fields inside a `root` account block). It does NOT apply to the top-level `inherit (host) foo bar ...;`/`inherit (config.theme) foo bar ...;` list every module already has at the top, whose fields are used broadly across the whole file as bare names — that's already the correct, expected form regardless of field count.
+- When a source's own sub-fields are independently meaningful identifiers reused standalone in multiple places (e.g. `pkgs.mpvScripts.modernz`), inherit the leaf names directly (`inherit (pkgs.mpvScripts) modernz sponsorblock-minimal ...;`) rather than aliasing the parent — this drops the repeated namespace prefix entirely instead of just shortening it.
 - Never consolidate `inputs.*` this way — keep flake inputs fully qualified (`inputs.nixpkgs`, `inputs.hardware`, etc.) even when a file uses several.
-- `config.hjem` always stays fully qualified too, even when it would otherwise qualify for inheriting — keeps every module that reads it back consistent with the `hjem.users.${userName} = { ... }` option-definition style used everywhere else.
+- `config.hjem` always stays fully qualified too, even when it would otherwise qualify for inheriting — keeps every module that reads it back consistent with the `hjem.users.${userName} = { ... }` option-definition style used everywhere else. This exception is narrow: it does not extend to `userName` itself at that same call site — whether `hjem.users.${...}` uses `host.userName` or an already-inherited bare `userName` still just follows the normal threshold rule for that file, since `userName` (unlike `hjem`) is reused too commonly elsewhere to force one spelling at a single call site without creating more within-file inconsistency than it removes.
 - For a source with no established precedent either way yet (first time destructuring that kind of record), raise it for discussion rather than assuming the default applies.
+- A field only ever accessed with a fallback (`foo.bar or default`) is optional — `inherit` throws at eval time if the attribute is missing, so it can't be used for that field. If the guaranteed field it falls back to only clears the normal threshold *because* of that fallback reference (e.g. `spec.name` used twice total: once directly, once inside `spec.appId or spec.name`), that's too marginal to split out — leave both inline (see `modules/hosts/_apps.nix`'s `mkApp`). Only pull the guaranteed field into its own `inherit` if it's independently repeated enough to clear the threshold on its own, without counting the fallback use.
+- Minimize `with` outside of package lists (`with pkgs;`/`with lib;`) — prefer `inherit`, or a short alias (`c`/`h` for `config.colors`/`config.colors.withHashtag`, see below) for a dense block. The one standing exception is `imports = with self.nixosModules; [ moduleA moduleB ];` (and the `inputs.hardware.nixosModules` equivalent on hosts with hardware profiles) — this is the established dendritic-pattern idiom across every aggregator file (`modules/profiles/*.nix`, host `default.nix` files, category `default.nix` aggregators) and stays as-is for cross-file readability/consistency, even though it's technically a `with`. It carries little of the ambiguity/shadowing risk that motivates avoiding `with` elsewhere, since these files have no other local bindings a bare module name could collide with.
+- `config.colors`/`config.colors.withHashtag` get the short aliases `c`/`h` respectively (documented in `modules/nixos/system/theming/_options.nix`'s usage comment): `c = config.colors;` when a file only needs the raw form, `h = c.withHashtag;` alongside it when a file needs both forms, or `h = config.colors.withHashtag;` alone when a file only ever needs the hashed form. Pick whichever form(s) the file actually needs as the alias target — don't default to aliasing the top-level `config.colors` and dotting `.withHashtag` everywhere if a file only uses the hashed form.
 
 ## Nixpkgs configuration
 
@@ -92,16 +100,6 @@ To use unstable packages in any module, add `pkgs-unstable` to the args:
 ```nix
 { host, pkgs-unstable, ... }:
 ```
-
-## Creating files — use `new:` with brace expansion
-
-```
-new: <dir>/<name>.nix
-new: <dir>/<name>/{default.nix, config.nix}
-new: <dir>/<name>/{default.nix, _options.nix, <subdir>/{_a.nix, _b.nix}}
-```
-
-Paths are relative to `modules/`.
 
 ## File patterns
 

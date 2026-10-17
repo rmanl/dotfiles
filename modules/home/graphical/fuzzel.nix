@@ -14,11 +14,12 @@
         terminal
         userName
         ;
+      inherit (config.theme) fontMono fontSize;
     in
     {
       hjem.users.${userName} = {
         packages = [ pkgs.fuzzel ];
-        files.".config/fuzzel/fuzzel.ini".text = with config.theme; ''
+        files.".config/fuzzel/fuzzel.ini".text = ''
           [border]
           radius=0
 

@@ -13,6 +13,7 @@
         config.hjem.users.${userName}.environment.loadEnv
       } && exec ${wm.startCmd} > /dev/null"'';
       orderOffset = config.security.pam.services.greetd.rules.session.gnome_keyring.order - 1;
+      c = config.colors;
     in
     {
       environment.systemPackages = with pkgs; [
@@ -56,8 +57,8 @@
               command = session;
               user = "${userName}";
             };
-            default_session = with config.colors; {
-              command = "${pkgs.tuigreet}/bin/tuigreet --remember --asterisks --container-padding 3 --time --time-format '%I:%M %p | %a • %h | %F' --cmd ${lib.escapeShellArg session} --theme 'container=${base02};border=${base0C}'";
+            default_session = {
+              command = "${pkgs.tuigreet}/bin/tuigreet --remember --asterisks --container-padding 3 --time --time-format '%I:%M %p | %a • %h | %F' --cmd ${lib.escapeShellArg session} --theme 'container=${c.base02};border=${c.base0C}'";
               user = "greeter";
             };
           };

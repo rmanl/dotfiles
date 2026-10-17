@@ -14,7 +14,9 @@
         userName
         volumeMixer
         ;
-      inherit (config) colors theme;
+      inherit (config) theme;
+      c = config.colors;
+      h = c.withHashtag;
       runOnce = program: "pgrep ${program} || ${program}";
     in
     {
@@ -22,7 +24,7 @@
       hjem.users.${userName} = {
         packages = [ pkgs.waybar ];
         files = {
-          ".config/waybar/config" = with colors.withHashtag; {
+          ".config/waybar/config" = {
             generator = lib.generators.toJSON { };
             value = {
               layer = "top";
@@ -144,7 +146,7 @@
                 format = "{icon}";
                 format-icons = {
                   active = "<span font='10'>󰘿</span>";
-                  inactive = "<span font='12' color='${base03}'>󰏊</span>";
+                  inactive = "<span font='12' color='${h.base03}'>󰏊</span>";
                 };
                 interval = 1;
                 on-click = "megacmd --toggle";
@@ -174,20 +176,20 @@
                 format = "{icon}";
                 format-icons = {
                   activated = "<span font='9'></span>";
-                  deactivated = "<span font='9' color='${base03}'></span>";
+                  deactivated = "<span font='9' color='${h.base03}'></span>";
                 };
                 tooltip = false;
               };
             };
           };
-          ".config/waybar/style.css".text = with colors.withHashtag; ''
+          ".config/waybar/style.css".text = ''
             * {
               font-family: Material Design Icons, monospace;
             }
 
             window#waybar {
-              background-color: rgba(${theme.toRGB colors.base00},0.1);
-              color: ${base06};
+              background-color: rgba(${theme.toRGB c.base00},0.1);
+              color: ${h.base06};
               font-size: 16px;
               transition-property: background-color;
               transition-duration: 0.5s;
@@ -199,7 +201,7 @@
 
             #workspaces {
               font-size: 18px;
-              background-color: rgba(${theme.toRGB colors.base01},0.7);
+              background-color: rgba(${theme.toRGB c.base01},0.7);
               border-radius: 3px;
               margin: 5px 4px 5px 0;
               padding: 0 8px;
@@ -214,25 +216,25 @@
             }
 
             #workspaces button.empty {
-              background-color: rgba(${theme.toRGB colors.base01},0.7);
+              background-color: rgba(${theme.toRGB c.base01},0.7);
             }
 
             #workspaces button.active {
-              color: ${base0C};
+              color: ${h.base0C};
             }
 
             #workspaces button:hover {
-              color: ${base0C};
+              color: ${h.base0C};
               box-shadow: inherit;
               text-shadow: inherit;
             }
 
             #workspaces button.urgent {
-              color: ${base08};
+              color: ${h.base08};
             }
 
             tooltip {
-              background: ${base00};
+              background: ${h.base00};
               opacity: 0.85;
               border-radius: 7px;
               margin: 10px;
@@ -258,42 +260,42 @@
             }
 
             #custom-media_status {
-              background-color: rgba(${theme.toRGB colors.base01},0.7);
+              background-color: rgba(${theme.toRGB c.base01},0.7);
               border-radius: 3px;
               margin-right: 4px;
               padding: 0 8px;
             }
 
             #backlight {
-              background-color: rgba(${theme.toRGB colors.base01},0.7);
+              background-color: rgba(${theme.toRGB c.base01},0.7);
               border-radius: 3px 0 0 3px;
               padding-left: 8px;
             }
 
             #battery {
-              background-color: rgba(${theme.toRGB colors.base01},0.7);
+              background-color: rgba(${theme.toRGB c.base01},0.7);
               border-radius: 0 3px 3px 0;
               padding-left: 3px;
               padding-right: 8px;
             }
 
             #battery.warning {
-              color: ${base09};
+              color: ${h.base09};
             }
 
             #battery.critical:not(.charging) {
-              color: ${base08};
+              color: ${h.base08};
             }
 
             #clock {
-              background-color: rgba(${theme.toRGB colors.base01},0.7);
+              background-color: rgba(${theme.toRGB c.base01},0.7);
               border-radius: 3px;
               margin-right: 4px;
               padding: 0 8px;
             }
 
             #tray {
-              background-color: rgba(${theme.toRGB colors.base01},0.7);
+              background-color: rgba(${theme.toRGB c.base01},0.7);
               border-radius: 3px;
               margin-right: 4px;
               padding: 0 8px;
@@ -301,25 +303,25 @@
 
             #custom-hwinfo {
               font-size: 10px;
-              background-color: rgba(${theme.toRGB colors.base01},0.7);
+              background-color: rgba(${theme.toRGB c.base01},0.7);
               border-radius: 3px;
               margin-right: 4px;
               padding: 0 8px;
             }
 
             #wireplumber {
-              background-color: rgba(${theme.toRGB colors.base01},0.7);
+              background-color: rgba(${theme.toRGB c.base01},0.7);
               border-radius: 3px 0 0 3px;
               padding-left: 8px;
             }
 
             #custom-megacmd {
-              background-color: rgba(${theme.toRGB colors.base01},0.7);
+              background-color: rgba(${theme.toRGB c.base01},0.7);
               padding: 0 3px;
             }
 
             #idle_inhibitor {
-              background-color: rgba(${theme.toRGB colors.base01},0.7);
+              background-color: rgba(${theme.toRGB c.base01},0.7);
               border-radius: 0 3px 3px 0;
               margin-right: 4px;
               padding-left: 3px;

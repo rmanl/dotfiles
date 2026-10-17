@@ -1,11 +1,14 @@
 {
   flake.nixosModules.starship =
     { host, pkgs, ... }:
+    let
+      inherit (host) userName;
+    in
     {
-      hjem.users.${host.userName} = {
+      hjem.users.${userName} = {
         packages = [ pkgs.starship ];
         environment.sessionVariables = {
-          STARSHIP_CACHE = "/home/${host.userName}/.local/cache/starship";
+          STARSHIP_CACHE = "/home/${userName}/.local/cache/starship";
         };
         files.".config/starship.toml" = {
           generator = (pkgs.formats.toml { }).generate "starship.toml";

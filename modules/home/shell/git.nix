@@ -18,6 +18,7 @@
       publicGitEmail = email.gitHub;
       publicKey = "${home}/.ssh/${sshKeyName}.pub";
       privateGitConfig = "${home}/.config/git/gitconfig.private";
+      c = config.colors.withHashtag;
     in
     {
       hjem.users.${userName} = {
@@ -26,7 +27,7 @@
           delta
         ];
         files = {
-          ".config/git/config".text = with config.colors.withHashtag; ''
+          ".config/git/config".text = ''
             [user]
               name = ${handle}
               email = ${publicGitEmail}
@@ -45,10 +46,10 @@
               navigate = true
               line-numbers = true
               syntax-theme = "none"
-              file-style = "${base0D} bold"
-              hunk-header-style = "${base0E}"
-              minus-style = "${base05} ${diffRed}"
-              plus-style = "${base05} ${diffGreen}"
+              file-style = "${c.base0D} bold"
+              hunk-header-style = "${c.base0E}"
+              minus-style = "${c.base05} ${c.diffRed}"
+              plus-style = "${c.base05} ${c.diffGreen}"
 
             [init]
               defaultBranch = main

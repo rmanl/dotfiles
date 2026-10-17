@@ -15,16 +15,24 @@
         volumeMixer
         vpn
         ;
+
+      monitorConfig =
+        let
+          m = monitor;
+        in
+        ''
+          hl.monitor({
+            output = "${m.name}",
+            mode = "${toString m.width}x${toString m.height}@${toString m.refresh}",
+            position = "${toString m.x}x${toString m.y}",
+            scale = ${toString m.scale},
+            vrr = ${if m.vrr then "1" else "0"},
+          })
+        '';
     in
     {
       hjem.users.${userName}.files.".config/hypr/hyprland.lua".text = ''
-        hl.monitor({
-          output = "${monitor.name}",
-          mode = "${toString monitor.width}x${toString monitor.height}@${toString monitor.refresh}",
-          position = "${toString monitor.x}x${toString monitor.y}",
-          scale = ${toString monitor.scale},
-          vrr = ${if monitor.vrr then "1" else "0"},
-        })
+        ${monitorConfig}
 
         -- dialogs
         hl.window_rule({ match = { title = "^(Open File)(.*)$" }, float = true })

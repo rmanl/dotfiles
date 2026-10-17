@@ -9,7 +9,7 @@
     }:
     let
       inherit (host) userName colorTheme;
-      colors = config.colors;
+      c = config.colors;
     in
     {
       hjem.users.${userName} = {
@@ -27,14 +27,14 @@
           };
           ".claude/statusline.sh" = {
             executable = true;
-            text = with colors; ''
+            text = ''
               #!/usr/bin/env bash
               input=$(cat)
 
-              chip_bg="${base03}"
-              dim="${base03}"
-              text="${base06}"
-              alt="${base00}"
+              chip_bg="${c.base03}"
+              dim="${c.base03}"
+              text="${c.base06}"
+              alt="${c.base00}"
 
               hex2rgb() { printf '%d;%d;%d' "0x''${1:0:2}" "0x''${1:2:2}" "0x''${1:4:2}"; }
               fg() { printf '\033[38;2;%sm' "$(hex2rgb "$1")"; }

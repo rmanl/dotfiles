@@ -4,6 +4,10 @@
   #   c = config.colors;
   #   c.base0D              → "8b9a97"
   #   c.withHashtag.base0D  → "#8b9a97"
+  #
+  #   # when both forms are needed in the same file:
+  #   h = c.withHashtag;
+  #   h.base0D              → "#8b9a97"
   options.colors = lib.mkOption {
     type = lib.types.attrsOf lib.types.anything;
     default = { };

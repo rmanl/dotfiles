@@ -15,6 +15,7 @@
         userName
         ;
       aliasBlock = import ../_aliasBlock.nix { inherit lib; };
+      c = config.colors;
     in
     {
       environment.shells = [ pkgs.zsh ];
@@ -36,7 +37,7 @@
             . ${config.hjem.users.${userName}.environment.loadEnv}
           '';
 
-          ".config/zsh/.zshrc".text = with config.colors; ''
+          ".config/zsh/.zshrc".text = ''
             # --- options ---
             setopt AUTO_CD
             setopt HIST_EXPIRE_DUPS_FIRST
@@ -69,9 +70,9 @@
             source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
             ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
             typeset -A ZSH_HIGHLIGHT_STYLES
-            ZSH_HIGHLIGHT_STYLES[alias]='fg=${base0E}'
+            ZSH_HIGHLIGHT_STYLES[alias]='fg=${c.base0E}'
             typeset -A ZSH_HIGHLIGHT_PATTERNS
-            ZSH_HIGHLIGHT_PATTERNS+=('rm -rf *' 'fg=${base00},bg=${base08}')
+            ZSH_HIGHLIGHT_PATTERNS+=('rm -rf *' 'fg=${c.base00},bg=${c.base08}')
 
             # --- tool init ---
             source ${inputs.themes}/extra/fzf/${colorTheme}.zsh

@@ -18,26 +18,17 @@
 
       monitorRule =
         let
-          inherit (monitor)
-            name
-            width
-            height
-            refresh
-            x
-            y
-            scale
-            vrr
-            ;
+          m = monitor;
         in
         lib.concatStringsSep "," [
-          "name:^${name}$"
-          "width:${toString width}"
-          "height:${toString height}"
-          "refresh:${toString refresh}"
-          "x:${toString x}"
-          "y:${toString y}"
-          "scale:${toString scale}"
-          "vrr:${if vrr then "1" else "0"}"
+          "name:^${m.name}$"
+          "width:${toString m.width}"
+          "height:${toString m.height}"
+          "refresh:${toString m.refresh}"
+          "x:${toString m.x}"
+          "y:${toString m.y}"
+          "scale:${toString m.scale}"
+          "vrr:${if m.vrr then "1" else "0"}"
         ];
     in
     {
