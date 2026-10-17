@@ -64,12 +64,15 @@
           # ========== misc ==========
           end-of-file-fixer.enable = true;
 
-          unwanted-builtins = {
-            enable = false;
-            name = "unwanted builtins function calls";
-            entry = "${./unwanted-builtins.sh}";
-            files = ".*";
-            language = "script";
+          # ========== pre-push ==========
+          nix-flake-check = {
+            enable = true;
+            name = "nix flake check";
+            description = "runs nix flake check before pushing";
+            stages = [ "pre-push" ];
+            pass_filenames = false;
+            language = "system";
+            entry = "env NIXPKGS_ALLOW_UNFREE=1 nix flake check --impure --keep-going --show-trace";
           };
         };
       };
