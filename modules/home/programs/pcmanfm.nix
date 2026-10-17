@@ -1,19 +1,29 @@
 {
   flake.nixosModules.pcmanfm =
-    { host, pkgs, ... }:
+    {
+      host,
+      pkgs,
+      lib,
+      ...
+    }:
     let
-      inherit (host) userName;
+      inherit (host) userName isMultiDisk isGaming;
+      dataPath = if isMultiDisk then "/mnt/data" else "/home/${userName}/data";
     in
     {
       hjem.users.${userName} = {
         packages = [ pkgs.pcmanfm ];
 
         files = {
-          ".config/gtk-3.0/bookmarks".text = ''
-            file:///home/${userName} ${userName}
-            file:///home/${userName}/.config/frosty frosty
-            file:///home/${userName}/downloads downloads
-          '';
+          ".config/gtk-3.0/bookmarks".text = lib.concatLines (
+            [
+              "file:///home/${userName} ${userName}"
+              "file:///home/${userName}/.config/dotfiles dotfiles"
+              "file:///home/${userName}/downloads downloads"
+              "file://${dataPath} data"
+            ]
+            ++ lib.optional isGaming "file:///mnt/games games"
+          );
 
           ".config/pcmanfm/default/pcmanfm.conf".text = ''
             [config]

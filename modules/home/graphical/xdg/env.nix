@@ -17,7 +17,7 @@
     {
       hjem.users.${userName} = {
         environment.sessionVariables = {
-          FLAKE = "$HOME/.config/frosty";
+          FLAKE = "$HOME/.config/dotfiles";
           XDG_CACHE_HOME = "$HOME/.local/cache";
           XDG_CONFIG_HOME = "$HOME/.config";
           XDG_CURRENT_DESKTOP = wm.xdgDesktopName;

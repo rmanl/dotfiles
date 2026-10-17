@@ -31,7 +31,7 @@
 
         v = "vim";
 
-        dots = "cd /home/${host.userName}/.config/frosty";
+        dots = "cd /home/${host.userName}/.config/dotfiles";
       };
 
       programs.zsh.promptInit = ''

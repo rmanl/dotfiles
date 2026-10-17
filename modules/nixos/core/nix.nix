@@ -21,7 +21,7 @@
         enable = true;
         clean.enable = true;
         clean.extraArgs = "--keep-since 20d --keep 10";
-        flake = "${config.users.users.${host.userName}.home}/.config/frosty";
+        flake = "${config.users.users.${host.userName}.home}/.config/dotfiles";
       };
     };
 }
