@@ -185,7 +185,9 @@ package = config.boot.kernelPackages.nvidiaPackages.mkDriver {
 };
 ```
 
-Leave a comment above the pin noting why `stable` failed and against which kernel the pinned version was confirmed to build. On each subsequent flake update, check whether `nvidiaPackages.stable` builds again against the new kernel — if so, comment out the pin (don't delete it) and switch back to `nvidiaPackages.stable`.
+Leave a comment above the pin noting why `stable` failed and against which kernel the pinned version was confirmed to build. The failure is tied to the kernel *version*, not the flavor — e.g. `linuxPackages_xanmod_stable` and `linuxPackages_zen` on the same 7.2.x line both fail identically, while nixpkgs' plain `linuxPackages` (an older/different line) builds fine. Switching kernel flavor is not a fix for this; only a newer kernel line or an upstream driver fix is.
+
+On each subsequent flake update, check both `nvidiaPackages.stable`'s current version and the pinned version against the new kernel. Verify with a real build, not just eval/`nix flake check` — those only instantiate the derivation and won't catch a kernel-module compile failure. Build the open module directly (`nix build .#nixosConfigurations.<host>.pkgs.<kernelPackages>.nvidiaPackages.stable.open`) or run the full `scripts/system-flake-test.sh`. If either version now builds, comment out the pin (don't delete it) and switch `package` back to `nvidiaPackages.stable` — or bump the pin to a newer version if `stable` itself still fails but something newer builds.
 
 ## Hyprpicker nixpkgs pin
 
