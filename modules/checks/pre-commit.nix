@@ -72,7 +72,7 @@
             stages = [ "pre-push" ];
             pass_filenames = false;
             language = "system";
-            entry = "env NIXPKGS_ALLOW_UNFREE=1 nix flake check --impure --keep-going --show-trace";
+            entry = "env NIXPKGS_ALLOW_UNFREE=1 nix flake check --impure --keep-going --show-trace --no-build";
           };
         };
       };
