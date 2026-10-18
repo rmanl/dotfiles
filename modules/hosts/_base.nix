@@ -18,6 +18,9 @@
   isMultiDisk = false;
 }
 // import ./_apps.nix
+// {
+  paths = import ./_paths.nix;
+}
 // (
   if inputs == null then
     { }

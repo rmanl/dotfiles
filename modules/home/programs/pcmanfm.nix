@@ -7,8 +7,9 @@
       ...
     }:
     let
-      inherit (host) userName isMultiDisk isGaming;
-      dataPath = if isMultiDisk then "/mnt/data" else "/home/${userName}/data";
+      inherit (host) userName isGaming;
+      paths = host.paths host;
+      inherit (paths.managed) download dataDir;
     in
     {
       hjem.users.${userName} = {
@@ -19,10 +20,11 @@
             [
               "file:///home/${userName} ${userName}"
               "file:///home/${userName}/.config/dotfiles dotfiles"
-              "file:///home/${userName}/downloads downloads"
-              "file://${dataPath} data"
+              "file://${download.path} downloads"
+              "file://${dataDir.path} data"
             ]
-            ++ lib.optional isGaming "file:///mnt/games games"
+            ++ lib.optional isGaming "file://${paths.games.path} games"
+            ++ lib.optional isGaming "file://${paths.torrent.path} torrents"
           );
 
           ".config/pcmanfm/default/pcmanfm.conf".text = ''
