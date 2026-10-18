@@ -71,9 +71,12 @@
         -- steam / bottles / heroic: same tile-forcing as spotify above
         hl.window_rule({ match = { class = "^(steam)$" }, tile = true, workspace = "4" })
         hl.window_rule({ match = { class = "^(steam)$", title = "^(Friends List)$" }, float = true, size = "340 800" })
-        hl.window_rule({ match = { class = "^(steam)$", title = "^(Steam Settings)$" }, float = true, size = "600 700" })
+        hl.window_rule({ match = { class = "^(steam)$", title = "^(Steam Settings)$" }, float = true, size = "1200 800" })
         hl.window_rule({ match = { class = "^(com.usebottles.bottles)$" }, tile = true, workspace = "4" })
         hl.window_rule({ match = { class = "^(heroic)$" }, tile = true, workspace = "4" })
+
+        -- transmission
+        hl.window_rule({ match = { class = "^(transmission-gtk)$" }, tile = true, workspace = "3" })
       '';
     };
 }
