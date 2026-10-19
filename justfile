@@ -39,8 +39,12 @@ bootstrap *ARGS:
   #!/usr/bin/env bash
   set -euo pipefail
   source scripts/helpers.sh
+  mapfile -t hosts < <(nix eval --impure --raw --expr 'import ./modules/hosts/_names.nix' --apply 'names: builtins.concatStringsSep "\n" names')
   while true; do
-    read -rp "Target hostname: " hostname
+    echo "Target hostname:"
+    select hostname in "${hosts[@]}"; do
+      [ -n "$hostname" ] && break
+    done
     read -rp "Target IP: " ip
     yes_or_no "Confirm hostname='$hostname', IP='$ip'?" && break
   done
