@@ -101,6 +101,13 @@ sudo ls -la /dev/disk/by-id
 nvme-eui.002538554140fdb5
 ```
 
+**2. Write the secondary disk entry in `_disko.nix` (optional, multi-drive systems only)**
+
+Follow `modules/hosts/exegol/_disko.nix` as a reference: give the disk any key other than
+`primary`, one partition named `luks` with a unique `content.name`, the same
+`passwordFile = "/tmp/disko-password"`, and
+`initrdUnlock = if host.isMinimal then true else false;`.
+
 ## Windows Boot Manager on multi-disk systems
 
 **1. Find Windows EFI Partition**

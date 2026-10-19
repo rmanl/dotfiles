@@ -10,6 +10,7 @@ target_user=${BOOTSTRAP_USER-$(whoami)}
 ssh_port=${BOOTSTRAP_SSH_PORT-22}
 ssh_key=${BOOTSTRAP_SSH_KEY-}
 luks_passphrase="password"
+luks_secondary_drive_labels=""
 git_root=$(git rev-parse --show-toplevel)
 repo_name=$(basename "${git_root}")
 
@@ -42,6 +43,11 @@ function help_and_exit() {
   echo "  -u <target_user>                        specify target_user with sudo access, config will be cloned to their home."
   echo "                                          Default='${target_user}'."
   echo "  --port <ssh_port>                       specify the ssh port to use for remote access. Default=${ssh_port}."
+  echo "  --luks-secondary-drive-labels <names>   override the auto-detected secondary LUKS drive names (declared as"
+  echo "                                          disko.devices.disk.*.content.partitions.luks.content.name in"
+  echo "                                          modules/hosts/<name>/_disko.nix), separated by commas. Auto-detected"
+  echo "                                          from the target flake's disko config by default."
+  echo '                                          Example: --luks-secondary-drive-labels "encrypteddata,encryptedgames"'
   echo "  --debug                                 Enable debug mode."
   echo "  -h | --help                             Print this help."
   exit 0
@@ -64,6 +70,10 @@ while [[ $# -gt 0 ]]; do
   -k)
     shift
     ssh_key=$1
+    ;;
+  --luks-secondary-drive-labels)
+    shift
+    luks_secondary_drive_labels=$1
     ;;
   --port)
     shift
@@ -130,6 +140,29 @@ function nixos_anywhere() {
     green "Using '$luks_passphrase' as the luks encryption passphrase. Change after installation."
     $ssh_root_cmd "/bin/sh -c 'echo $luks_passphrase > /tmp/disko-password'"
   fi
+  if [ -z "${luks_secondary_drive_labels}" ]; then
+    # shellcheck disable=SC2016
+    luks_secondary_drive_labels=$(nix eval --impure --raw ".#nixosConfigurations.$target_hostname" --apply '
+      c:
+      c.lib.concatStringsSep "," (
+        builtins.concatMap (
+          name:
+          if name == "primary" then
+            [ ]
+          else if
+            c.config.disko.devices.disk.${name}.content.partitions ? luks
+            && c.config.disko.devices.disk.${name}.content.partitions.luks.content.type or null == "luks"
+          then
+            [ c.config.disko.devices.disk.${name}.content.partitions.luks.content.name ]
+          else
+            [ ]
+        ) (builtins.attrNames c.config.disko.devices.disk)
+      )
+    ' 2>/dev/null)
+  fi
+  if [ -n "${luks_secondary_drive_labels}" ]; then
+    luks_setup_secondary_drive_decryption
+  fi
   if no_or_yes "Generate a new hardware config for this host? Yes if your config doesn't have an entry for this host."; then
     green "Generating hardware-configuration.nix on $target_hostname and adding it to the local config."
     $ssh_root_cmd "nixos-generate-config --no-filesystems --root /mnt"
@@ -152,6 +185,19 @@ function nixos_anywhere() {
   green "Adding $target_destination's ssh host fingerprint to ~/.ssh/known_hosts"
   ssh-keyscan -p "$ssh_port" "$target_destination" | grep -v '^#' >>~/.ssh/known_hosts || true
   cd - >/dev/null
+}
+
+function luks_setup_secondary_drive_decryption() {
+  green "Generating /luks-secondary-unlock.key"
+  local key="/luks-secondary-unlock.key"
+  $ssh_root_cmd "dd bs=512 count=4 if=/dev/random of=$key iflag=fullblock && chmod 400 $key"
+
+  green "Running cryptsetup luksAddKey to add $key for: $luks_secondary_drive_labels"
+  readarray -td, drivenames < <(printf '%s' "$luks_secondary_drive_labels")
+  for name in "${drivenames[@]}"; do
+    device_path=$($ssh_root_cmd -q "cryptsetup status \"$name\" | awk '/device:/ {print \$2}'")
+    $ssh_root_cmd "echo \"$luks_passphrase\" | cryptsetup luksAddKey $device_path $key"
+  done
 }
 
 function update_sops_file() {

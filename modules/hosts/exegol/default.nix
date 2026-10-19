@@ -36,7 +36,7 @@ in
         ];
       };
 
-      hostExegol = { ... }: {
+      hostExegol = { lib, ... }: {
         imports = [
           inputs.disko.nixosModules.disko
         ]
@@ -53,6 +53,12 @@ in
           # dynamic values need self to resolve at eval time
           self.nixosModules."${host.wm}Wm"
         ]);
+
+        # unlocks data/games post-boot via a keyfile on primary's root
+        environment.etc.crypttab.text = lib.optionalString (!host.isMinimal) ''
+          encrypteddata UUID=87a0b762-0d76-457a-a72c-d3c488a90c94 /luks-secondary-unlock.key
+          encryptedgames UUID=acc32a35-3f98-4f78-b97a-b20f78ebcd11 /luks-secondary-unlock.key
+        '';
       };
     };
   };
