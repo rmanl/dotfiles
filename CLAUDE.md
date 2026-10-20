@@ -201,6 +201,12 @@ On each flake update, check the `hyprpicker` version in both `nixpkgs#hyprpicker
 
 On each flake update, check whether `pkgs.mango` (stable) now exists — if so, and its version is equal to or newer than the currently-installed `pkgs-unstable.mango` version, switch `mango/default.nix` to `pkgs.mango` and drop the `pkgs-unstable` arg from that module. Once switched, delete this section.
 
+## Bottles nixpkgs-unstable pin
+
+`modules/home/gaming/misc.nix` installs `bottles` from `pkgs-unstable.bottles` instead of `pkgs.bottles` because stable nixpkgs (tracking `nixos-26.05`) ships Bottles 63.2, whose connectivity check only pings `repo.usebottles.com` — a domain that's been decommissioned upstream (NXDOMAIN on every resolver). With no reachable check URL, Bottles always reports itself offline and the first-run setup wizard hangs forever on "Loading bottles...". Bottles 67.4 (`nixpkgs-unstable`) fixed this with a 3-URL fallback check (`proxy.usebottles.com`, `github.com`, `cloudflare.com` — any one succeeding counts as online), which resolves correctly.
+
+On each flake update, check `pkgs.bottles`'s version — once it's >= the version that includes the fallback check (67.4 or newer), switch `misc.nix` back to `pkgs.bottles` and drop the `pkgs-unstable` arg from that module. Verify by checking `bottles/backend/utils/connection.py` in that version's source still has the multi-URL `_check_urls` tuple, not just a version-number bump. Once switched, delete this section.
+
 ## AppArmor on NixOS
 
 Removed from `modules/nixos/core/security/default.nix` (was `security.apparmor.enable` + `killUnconfinedConfinables` + `apparmor-profiles`/`apparmor-utils` packages) because it provided zero real confinement: upstream profiles are written for FHS paths (`/usr/lib/firefox/firefox`, `/opt/brave.com/...`) that don't exist on NixOS, and the shipped `brave`/`firefox` profiles specifically are unconfined no-op stubs regardless. A handful of NixOS *service* modules (`services.transmission`, `murmur`, `miniflux`, `lxc`) do ship real Nix-store-aware profiles via `security.apparmor.policies`, but none cover desktop GUI apps.

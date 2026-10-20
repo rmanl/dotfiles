@@ -9,6 +9,7 @@
     let
       allowedUnfree = [
         "claude-code"
+        "lsfg-vk" # bottles dependency
         "spotify"
         "steam"
         "steam-unwrapped"
