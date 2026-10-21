@@ -48,6 +48,7 @@
         enable_hotarea=0
 
         # misc
+        enable_border_resize=0
         xwayland_persistence=1
         sync_obj_enable=0
         no_border_when_single=0
