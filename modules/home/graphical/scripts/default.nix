@@ -4,6 +4,7 @@
     { ... }:
     {
       imports = with self.nixosModules; [
+        scriptsArchive
         scriptsCliphist
         scriptsCodex
         scriptsColorpick

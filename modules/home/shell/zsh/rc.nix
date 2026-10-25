@@ -141,6 +141,17 @@
             zle -N incognito
             bindkey -M vicmd '\ep' incognito
             bindkey -M viins '\ep' incognito
+
+            # M-z extract/compress archive in current directory
+            function archive() {
+              exec </dev/tty
+              exec <&1
+              archivemenu "$PWD"
+              zle reset-prompt > /dev/null 2>&1 || true
+            }
+            zle -N archive
+            bindkey -M vicmd '\ez' archive
+            bindkey -M viins '\ez' archive
           '';
         };
       };
