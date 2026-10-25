@@ -71,7 +71,6 @@
                   "9" = "󰭂";
                 };
                 on-click = "activate";
-                persistent-workspaces."*" = 5;
               };
 
               backlight = {
