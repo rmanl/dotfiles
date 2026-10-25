@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# shellcheck disable=SC1091
+source "$(dirname "${BASH_SOURCE[0]}")/helpers.sh"
+
 if [[ -n ${1-} ]]; then
   HOST=$1
 else
@@ -8,4 +11,4 @@ else
 fi
 export HOST
 
-sudo nixos-rebuild --impure --flake .#"$HOST" test --show-trace
+run_tolerating_flaky_units sudo nixos-rebuild --impure --flake .#"$HOST" test --show-trace

@@ -33,11 +33,11 @@
       # don't use multi-user.target: wifi printer can slow down boot
       systemd.services.ensure-printers = {
         wantedBy = lib.mkForce [ "network-online.target" ];
+        startLimitIntervalSec = 300;
+        startLimitBurst = 5;
         serviceConfig = {
           Restart = "on-failure";
           RestartSec = "15s";
-          StartLimitIntervalSec = "5min";
-          StartLimitBurst = 5;
         };
       };
 

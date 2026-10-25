@@ -20,9 +20,9 @@ do_rebuild() {
   if command -v nh &>/dev/null; then
     REPO_PATH=$PWD
     export REPO_PATH
-    nh os switch .#"$HOST" -- --impure --show-trace
+    run_tolerating_flaky_units nh os switch .#"$HOST" -- --impure --show-trace
   else
-    sudo nixos-rebuild "$switch_args"
+    run_tolerating_flaky_units sudo nixos-rebuild "$switch_args"
   fi
 }
 
