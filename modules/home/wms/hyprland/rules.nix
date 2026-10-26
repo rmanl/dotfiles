@@ -72,18 +72,18 @@
         hl.window_rule({ match = { class = "^(${vpn.appId})$" }, size = "450 800" })
 
         -- spotify
-        hl.window_rule({ match = { class = "^(${spotify.appId})$" }, tile = true, workspace = "5" })
+        hl.window_rule({ match = { class = "^(${spotify.appId})$" }, tile = true, workspace = "5 silent" })
       ''
       + lib.optionalString isGaming ''
         -- steam / bottles / heroic: same tile-forcing as spotify above
-        hl.window_rule({ match = { class = "^(steam)$" }, tile = true, workspace = "4" })
+        hl.window_rule({ match = { class = "^(steam)$" }, tile = true, workspace = "4 silent" })
         hl.window_rule({ match = { class = "^(steam)$", title = "^(Friends List)$" }, float = true, size = "340 800" })
         hl.window_rule({ match = { class = "^(steam)$", title = "^(Steam Settings)$" }, float = true, size = "1200 800" })
-        hl.window_rule({ match = { class = "^(com.usebottles.bottles)$" }, tile = true, workspace = "4" })
-        hl.window_rule({ match = { class = "^(heroic)$" }, tile = true, workspace = "4" })
+        hl.window_rule({ match = { class = "^(com.usebottles.bottles)$" }, tile = true, workspace = "4 silent" })
+        hl.window_rule({ match = { class = "^(heroic)$" }, tile = true, workspace = "4 silent" })
 
         -- transmission
-        hl.window_rule({ match = { class = "^(transmission-gtk)$" }, tile = true, workspace = "3" })
+        hl.window_rule({ match = { class = "^(transmission-gtk)$" }, tile = true, workspace = "3 silent" })
       '';
     };
 }

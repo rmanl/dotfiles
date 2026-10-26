@@ -84,18 +84,18 @@
       ''
       + lib.optionalString isGaming ''
         # steam
-        window_rule=force_tiled_state:1,tags:4,app_id:steam
-        window_rule=is_floating:1,width:340,height:800,tags:4,title:^(Friends List)$,app_id:steam
-        window_rule=is_floating:1,width:1200,height:800,tags:4,title:^(Steam Settings)$,app_id:steam
+        window_rule=force_tiled_state:1,is_tag_silent:1,tags:4,app_id:steam
+        window_rule=is_floating:1,is_tag_silent:1,width:340,height:800,tags:4,title:^(Friends List)$,app_id:steam
+        window_rule=is_floating:1,is_tag_silent:1,width:1200,height:800,tags:4,title:^(Steam Settings)$,app_id:steam
 
         # bottles
-        window_rule=force_tiled_state:1,tags:4,app_id:com.usebottles.bottles
+        window_rule=force_tiled_state:1,is_tag_silent:1,tags:4,app_id:com.usebottles.bottles
 
         # heroic
-        window_rule=force_tiled_state:1,tags:4,app_id:heroic
+        window_rule=force_tiled_state:1,is_tag_silent:1,tags:4,app_id:heroic
 
         # transmission
-        window_rule=force_tiled_state:1,tags:3,app_id:transmission-gtk
+        window_rule=force_tiled_state:1,is_tag_silent:1,tags:3,app_id:transmission-gtk
       '';
     };
 }
