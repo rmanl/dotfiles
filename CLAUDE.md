@@ -219,6 +219,20 @@ Removed from `modules/nixos/core/security/default.nix` (was `security.lsm = [ "l
 
 Recheck only if switching to a kernel package that compiles in `CONFIG_SECURITY_LOCKDOWN_LSM` (verify via that kernel's `linux-config-*` derivation) — and confirm it coexists with the Nvidia module (e.g. via module signing through lanzaboote) before re-enabling. Once re-enabled, delete this section.
 
+## ISO root password
+
+`modules/hosts/iso/default.nix` force-enables `PermitRootLogin = "yes"` and sets root's `initialHashedPassword` to a hardcoded hash checked into the repo (`modules/hosts/_base.nix`). This is intentional: the ISO only ever boots a blank install target with nothing on it yet, so root access at that stage grants nothing of value — it exists purely to bootstrap a new system via nixos-anywhere. Production hosts never use this hash; sops-managed credentials take over once a host is actually installed.
+
+## Root account password
+
+`modules/users/primary/nixos.nix` has root inherit the same `hashedPasswordFile`/`authorizedKeys` as the primary user, rather than disabling the root account outright. This is a non-issue in practice: `PermitRootLogin = "no"` blocks any remote use of it, and the password itself is sops-managed and rotates with the primary user's — it isn't a separate standing credential.
+
+## Waybar workspaces has no occupied/empty state
+
+`modules/home/graphical/waybar/default.nix` uses the `ext/workspaces` module (the Wayland `ext-workspace-v1` protocol), shared across mango and hyprland so both WMs render workspaces the same way without per-WM branching. That protocol only exposes `active`/`urgent`/`hidden` states — no window-count or occupied/empty bit — so waybar can never add an `.empty`-style CSS class to distinguish an empty tag from one with windows. Don't add CSS selectors targeting such a class; they will silently never match.
+
+Getting real per-tag occupancy would require replacing `ext/workspaces` with a `custom/` script module that queries each compositor's own IPC (`mmsg` for mango, `hyprctl` for hyprland, branching like `scripts/codex.nix`'s WM-binds parser does) — a bigger change, not attempted here because the protocol limitation is accepted as a tradeoff for staying WM-agnostic.
+
 ## Committing changes
 
 Never push — the user always pushes themselves.

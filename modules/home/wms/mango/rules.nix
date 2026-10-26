@@ -36,11 +36,11 @@
         # monitor
         monitor_rule=${monitorRule}
         # layouts in mango are per tag. so we'll set all tags to tile by default.
-        tag_rule=id:1,layout_name:tile,no_hide:1
-        tag_rule=id:2,layout_name:tile,no_hide:1
-        tag_rule=id:3,layout_name:tile,no_hide:1
-        tag_rule=id:4,layout_name:tile,no_hide:1
-        tag_rule=id:5,layout_name:tile,no_hide:1
+        tag_rule=id:1,layout_name:tile
+        tag_rule=id:2,layout_name:tile
+        tag_rule=id:3,layout_name:tile
+        tag_rule=id:4,layout_name:tile
+        tag_rule=id:5,layout_name:tile
         tag_rule=id:6,layout_name:tile
         tag_rule=id:7,layout_name:tile
         tag_rule=id:8,layout_name:tile

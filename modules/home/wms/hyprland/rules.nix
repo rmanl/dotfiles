@@ -34,13 +34,6 @@
       hjem.users.${userName}.files.".config/hypr/hyprland.lua".text = ''
         ${monitorConfig}
 
-        -- workspaces: keep 1-5 always shown in waybar, even empty
-        hl.workspace_rule({ workspace = "1", persistent = true })
-        hl.workspace_rule({ workspace = "2", persistent = true })
-        hl.workspace_rule({ workspace = "3", persistent = true })
-        hl.workspace_rule({ workspace = "4", persistent = true })
-        hl.workspace_rule({ workspace = "5", persistent = true })
-
         -- dialogs
         hl.window_rule({ match = { title = "^(Open File)(.*)$" }, float = true })
         hl.window_rule({ match = { title = "^(Select a File)(.*)$" }, float = true })

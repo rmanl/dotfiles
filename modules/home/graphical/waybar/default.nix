@@ -214,10 +214,6 @@
               padding: 0;
             }
 
-            #workspaces button.empty {
-              background-color: rgba(${theme.toRGB c.base01},0.7);
-            }
-
             #workspaces button.active {
               color: ${h.base0C};
             }
