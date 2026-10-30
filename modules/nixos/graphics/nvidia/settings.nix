@@ -26,17 +26,18 @@
 
         # pinned: nvidiaPackages.stable (595.71.05) still fails to build its open
         # kernel module against linux-xanmod (missing <string.h> for strncpy in
-        # os-interface.c) as of kernel 7.2.10 (confirmed 2026-10-17 via
-        # scripts/system-flake-test.sh). nixpkgs-unstable carries 595.104.02, which
-        # builds fine against the same kernel. Check if nixos-26.05's nvidiaPackages.stable
-        # has picked up a fixed version on the next update, and drop this pin if so.
+        # os-interface.c) as of kernel 7.2.13 (confirmed 2026-10-30 via a direct
+        # build of nvidiaPackages.stable.open). nixpkgs-unstable carries 595.112.07,
+        # which builds fine against the same kernel. Check if nixos-26.05's
+        # nvidiaPackages.stable has picked up a fixed version on the next update,
+        # and drop this pin if so.
         # see https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/linux/nvidia-x11/default.nix
         package = config.boot.kernelPackages.nvidiaPackages.mkDriver {
-          version = "595.104.02";
-          sha256_64bit = "sha256-5CHCAuTHn1jDx/MWG75xRU67PYiTb4ggWg4yfNBMWco=";
-          openSha256 = "sha256-FWk5ra2yjz8VAxAA8GXrSoeBj/XC1BKvsKsBKR09joE=";
-          settingsSha256 = "sha256-4Kxro6tvI5aX4nu2RspgyBsW+Jq3/VYjSAS5UGdzTCU=";
-          persistencedSha256 = "sha256-JsMLPqJuZwAtHngsQODMsmgO7F2tVkQ2arc7fYa2bwo=";
+          version = "595.112.07";
+          sha256_64bit = "sha256-Gjjs1Tii2mIypzMBhAY69Z6fyUbJCMylVb0HkJhIufA=";
+          openSha256 = "sha256-nQnXGCcvo4i7eGaVft3Xc9dRUPPH0v9Zi87cfI4i/Ys=";
+          settingsSha256 = "sha256-2bWSou/9J3EojhSRXBol/+yGGu2XZ6EuCptb5qXHM14=";
+          persistencedSha256 = "sha256-cGMEUXN7WPu822zZDLTSu6Owj8VXG4PNmhe9oKqMMKI=";
         };
       };
 
